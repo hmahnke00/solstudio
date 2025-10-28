@@ -1,0 +1,99 @@
+/* ---------- Base ---------- */
+:root{
+  --pad: clamp(12px, 2vw, 24px);
+  --gap: clamp(8px, 1.4vw, 18px);
+}
+*{ box-sizing: border-box; }
+html, body{ height:100%; margin:0; }
+body{
+  font-family: 'Slackside One', cursive;
+  background:#000;
+  color:#fff;
+}
+
+/* ---------- Brand block (shared) ---------- */
+/* Grid: logo on row 1 (centered), wordmarks below on row 2 */
+.brand{
+  display:grid;
+  grid-template-columns:auto auto;
+  grid-template-rows:auto auto;
+  grid-template-areas:
+    "logo  logo"
+    "left  right";
+  align-items:start;
+  justify-items:center;
+  gap: 8px 0;                 /* row-gap, col-gap */
+  user-select:none;
+  padding-top:30px;           /* same on both pages */
+}
+
+.brand img{
+  grid-area:logo;
+  width: clamp(90px, 12vw, 160px);
+  height:auto;
+  display:block;
+  opacity:0.8;                /* matches homepage */
+}
+
+.brand .wordmark{
+  grid-row:2;
+  writing-mode: vertical-rl;
+  font-weight:400;
+  font-size:48px;             /* Figma */
+  line-height:65px;           /* Figma */
+  letter-spacing:0.1px;       /* Figma */
+  color:#000;                 /* set to #fff if you prefer */
+  text-shadow:none;
+  opacity:0.8;
+  padding-block-start:0.4em;  /* start both just under logo */
+}
+
+.brand .wordmark.left{
+  grid-area:left;
+  transform: rotate(180deg);
+  margin-right:-8px;          /* pull toward logo */
+}
+.brand .wordmark.right{
+  grid-area:right;
+  transform:none;
+  margin-left:-8px;           /* pull toward logo */
+}
+
+/* ---------- Bottom nav (shared) ---------- */
+nav.site-nav{
+  position:absolute;
+  left:0; right:0;
+  bottom: clamp(12px, 3vh, 28px);
+  padding-inline: clamp(12px, 4vw, 48px);
+}
+.site-nav ul{
+  list-style:none; margin:0; padding:0;
+  display:flex; justify-content:center;
+  gap: clamp(24px, 8vw, 80px);
+  flex-wrap:wrap;
+}
+.site-nav a{
+  color:#fff;                 /* change to #000 if needed */
+  text-decoration:none;
+  font-weight:400;
+  font-size: clamp(16px, 2.2vw, 24px);
+  letter-spacing:0.06em;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.65);
+  position:relative;
+}
+.site-nav a::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:-6px;
+  height:2px; background:currentColor;
+  transform:scaleX(0); transform-origin:center;
+  transition:transform 200ms ease; opacity:.9;
+}
+.site-nav a:hover::after,
+.site-nav a:focus-visible::after{ transform:scaleX(1); }
+
+@media (prefers-reduced-motion: reduce){
+  .site-nav a::after{ transition:none; }
+}
+@media (max-width:480px){
+  nav.site-nav{ padding-inline:16px; }
+}

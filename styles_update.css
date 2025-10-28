@@ -1,0 +1,153 @@
+
+html { outline: 4px solid hotpink; }
+
+:root {
+  --pad: clamp(12px, 2vw, 24px);
+}
+
+/* Reset-ish */
+* { box-sizing: border-box; }
+html, body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  font-family: 'Slackside One', cursive;
+  color: #fff;
+  background: #000; /* shown while image loads */
+}
+
+/* Hero fills the viewport with the background image */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centers the logo block */
+  justify-content: flex-start;
+  padding-top: 30px;
+  overflow: hidden;
+  isolation: isolate; /* so the overlay sits above the background */
+  background-image: url("Branding/Untitled-1.png"); /* Replace with your image */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Subtle dark gradient to ensure white text is readable */
+/*.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.45) 0%,
+    rgba(0,0,0,0.20) 40%,
+    rgba(0,0,0,0.10) 70%,
+    rgba(0,0,0,0.00) 100%
+  );
+  z-index: -1;
+}
+
+/* Vertical logo block in the middle */
+.brand{
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "logo  logo"
+    "left  right";
+  align-items: start;
+  justify-items: center;              /* center the logo horizontally */
+  gap: 0px 0px;                      /* row gap, column gap */
+  user-select: none;
+}
+
+.brand img{
+  grid-area: logo;
+  width: clamp(90px, 12vw, 160px);
+  height: auto;
+  display: block;
+  opacity: .8;
+  /* optional subtle shadow */
+  /* filter: drop-shadow(0 2px 8px rgba(0,0,0,0.45)); */
+}
+.brand .wordmark{
+  writing-mode: vertical-rl;
+  line-height: 1;
+  letter-spacing: 0.25em;
+  font-weight: 400;
+  font-size: clamp(48px, 2.5vw, 28px);
+  line-height: 65px;
+  letter-spacing: 1px;
+  color: #000;        /* or #fff */
+  text-shadow: none;
+  padding-block-start: 0.4em;
+  opacity: .8;  /* start both columns just under the logo */
+}
+
+.brand .wordmark.left{
+  grid-area: left;
+  transform: rotate(180deg);
+  justify-self: end;
+   margin-right: -7px;  
+}
+
+/* Right column (reads top→bottom) */
+.brand .wordmark.right{
+  grid-area: right;
+  transform: none;
+  justify-self: start; 
+   margin-left: -7px;
+}
+
+/* Bottom navigation */
+nav.site-nav {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: clamp(12px, 3vh, 28px);
+  padding-inline: clamp(12px, 4vw, 48px);
+}
+.site-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: clamp(24px, 8vw, 80px);
+  flex-wrap: wrap;
+}
+.site-nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 400;
+  font-size: clamp(16px, 2.2vw, 24px);
+  letter-spacing: 0.06em;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.65);
+  position: relative;
+}
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -6px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 200ms ease;
+  opacity: 0.9;
+}
+.site-nav a:hover::after,
+.site-nav a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Accessibility for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .site-nav a::after { transition: none; }
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  nav.site-nav { padding-inline: 16px; }
+}
