@@ -82,7 +82,6 @@ body {
   border-radius: 18px;
   overflow: hidden;
   background: #111;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.22);
 }
 
 .item img {
@@ -101,46 +100,43 @@ body {
 /* === MOBILE LAYOUT === */
 
 @media (max-width: 768px) {
-   /* Wrap: single column, less padding */
-   .wrap {
-    grid-template-columns: 1fr;      /* logo on top, gallery below */
-    align-items: flex-start;
-    row-gap: 16px;
-    padding: 16px 16px 32px;
+
+  /* Whole page becomes a simple vertical stack */
+  .wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0 32px;
+    gap: 16px;                 /* space between logo and first photo */
   }
 
-  /* Logo: center and shrink a bit */
+  /* Logo centered at the top */
   .brand {
+    width: 100%;
+    display: flex;
     justify-content: center;
   }
 
-
   .brand img {
-    width: 140px;
+    width: 130px;              /* tweak as you like */
   }
 
-  /* Gallery: one column, vertical scroll */
+  /* Gallery: vertical list of images */
   .grid {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    display: grid;
-    grid-auto-flow: row;             /* stack items vertically */
-    grid-template-rows: none;
-    grid-template-columns: 1fr;
-    grid-auto-columns: 100%;
-    grid-auto-rows: auto;
-    gap: 16px;
-    overflow-x: hidden;
-    overflow-y: auto;                /* scroll up/down instead of sideways */
+    padding: 0 4px;            /* narrow side padding */
+    gap: 4px;                  /* <<< vertical gap between photos */
+    overflow: visible;         /* no horizontal scroll */
   }
 
-  
-  .grid {
-    width: 100%;
-  }
-
-  /* Tiles: full-width landscape cards */
+  /* Each photo card */
   .item {
-    width: 100%;
-    aspect-ratio: 3 / 2;             /* still landscape on mobile */
+    width: 99%;                /* almost full width */
+    margin: 0 auto;            /* center it */
+    aspect-ratio: 3 / 2;       /* landscape */
+    border-radius: 0px;
   }
 }
+
