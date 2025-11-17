@@ -99,7 +99,7 @@ body {
 
 /* === MOBILE LAYOUT === */
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
 
   /* Whole page becomes a simple vertical stack */
   .wrap {
