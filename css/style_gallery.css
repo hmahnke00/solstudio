@@ -1,125 +1,124 @@
-:root{
-  --gap: clamp(8px, 1.4vw, 18px);
-  --pad: clamp(10px, 3vw, 28px);
+/* ===========================
+   Studio Sol – Gallery Styles
+   =========================== */
+
+/* Base + reset-ish */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-*{ box-sizing: border-box; }
-html, body{ margin:0; }
-body{
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
   font-family: 'Slackside One', cursive;
-  background: #fff;
-  color: #fff;
+  background: #ffffff;
+  color: #000000;
 }
 
-/* Top nav */
-.topbar{
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: rgba(10,10,10,0.8);
-  backdrop-filter: blur(6px);
+/* Main layout: logo on left, gallery on right */
+
+.wrap {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;                 /* center whole block vertically */
+  column-gap: clamp(32px, 5vw, 72px);
+  padding: 24px 32px;
 }
-.topbar nav{
+
+/* Logo block */
+.brand {
   display: flex;
-  gap: clamp(14px, 2vw, 28px);
-  padding: 10px var(--pad);
+  align-items: center;      /* center logo vertically */
   justify-content: center;
 }
-.topbar a{
-  color: #fff;
-  text-decoration: none;
-  letter-spacing: 0.06em;
-  padding: 6px 8px;
-  border-radius: 10px;
-  transition: opacity .2s ease;
-}
-.topbar a:hover{ opacity: 0.8; }
-.topbar a.active{ text-decoration: underline; }
-
-/* Page wrap */
-.wrap{
-  padding: var(--pad);
-  max-width: none;
-  margin: 0 auto;
+.brand img {
+  width: clamp(260px, 30vh, 420px);   
+  height: auto;
+  opacity: 0.9;
 }
 
-/* Responsive grid */
-.grid{
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(12px, 2vw, 24px);
+
+/* Horizontal scrolling gallery strip */
+
+/* GLOBAL TILE HEIGHT (controls everything) */
+:root {
+  --tile-h: 48vh;           /* try 38–45vh to taste */
+}
+
+/* MAIN GALLERY GRID: 2 rows, width & height based on vh */
+
+.grid {
   width: 100%;
-  margin: 40px 0;       /* keeps the grid centered, optional */
+  display: grid;
+  grid-auto-flow: column;                                  /* scroll sideways */
+  grid-template-rows: repeat(2, var(--tile-h));            /* 2 × tile height */
+  grid-auto-columns: calc(var(--tile-h) * 1.5);            /* 3:2 landscape */
+  gap: 16px 32px;                                          /* row / col gap */
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px;
+  scrollbar-width: none;
 }
 
+.grid::-webkit-scrollbar {
+  display: none;
+}
 
-/* Items */
-.item{
-  aspect-ratio: 3 / 2;        /* a bit wider; feels larger */
-  border-radius: 16px;
+/* Each image “panel” */
+
+.item {
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
   overflow: hidden;
-  background: #f7f7f7;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  background: #111;
+  scroll-snap-align: center;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.22);
 }
-.item img{
+
+.item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-}
-.item:hover img{ transform: scale(1.02); }
-
-/* Lightbox */
-dialog#lightbox{
-  border: none;
-  padding: 0;
-  margin: 0;
-  background: rgba(0,0,0,0.85);
-  width: 100vw;
-  height: 100vh;
-  max-width: none;
-  max-height: none;
-}
-dialog#lightbox::backdrop{
-  background: rgba(0,0,0,0.6);
-}
-#lightbox img{
-  position: absolute;
-  inset: 50% auto auto 50%;
-  transform: translate(-50%, -50%);
-  max-width: 92vw;
-  max-height: 88vh;
-  width: auto;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-}
-#lightbox .close{
-  position: absolute;
-  top: 14px;
-  right: 18px;
-  font: inherit;
-  font-size: 28px;
-  line-height: 1;
-  background: rgba(255,255,255,0.15);
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 6px 10px;
-  cursor: pointer;
-}
-#lightbox[open]{ display: block; }
-
-/* --- Brand (logo + opposing wordmarks) --- */
-.brand {
-  display: flex;
-  justify-content: center;   /* center horizontally */
-  padding-top: 50px;         /* same top spacing as homepage */
+  transition: transform 0.35s ease;
 }
 
-.brand img { 
-  width: 650px; 
-  height: auto;
-  opacity: .8; }
+.item:hover img {
+  transform: scale(1.04);
+}
 
 
+/* === MOBILE LAYOUT === */
+
+@media (max-width: 700px) {
+  .wrap {
+    grid-template-columns: 1fr;
+    row-gap: 24px;
+    justify-items: center;
+    padding: 24px 16px 40px;
+  }
+
+  .brand img {
+    width: 120px;
+  }
+
+  .grid {
+    width: 100%;
+  }
+
+  .item {
+    flex: 0 0 90vw;
+    aspect-ratio: 3 / 2;
+  }
+}
