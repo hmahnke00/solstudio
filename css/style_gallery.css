@@ -28,9 +28,9 @@ body {
   height: 100vh;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;                 /* center whole block vertically */
+  align-items: center;
   column-gap: clamp(32px, 5vw, 72px);
-  padding: 24px 32px;
+  padding: var(--wrap-pad-y) 32px;
 }
 
 /* Logo block */
@@ -50,7 +50,11 @@ body {
 
 /* GLOBAL TILE HEIGHT (controls everything) */
 :root {
-  --tile-h: 48vh;           /* try 38–45vh to taste */
+  --wrap-pad-y: 24px;     /* vertical padding on .wrap (matches .wrap padding) */
+  --row-gap: 16px;        /* vertical gap between the two rows in .grid */
+
+  /* Solve for tile height so 2 tiles + gap + padding = viewport height */
+  --tile-h: calc((100vh - (var(--wrap-pad-y) * 2) - var(--row-gap)) / 2);
 }
 
 /* MAIN GALLERY GRID: 2 rows, width & height based on vh */
@@ -59,9 +63,10 @@ body {
   width: 100%;
   display: grid;
   grid-auto-flow: column;                                  /* scroll sideways */
-  grid-template-rows: repeat(2, var(--tile-h));            /* 2 × tile height */
+  grid-template-rows: repeat(2, minmax(0, var(--tile-h))); /* 2 × tile height */
   grid-auto-columns: calc(var(--tile-h) * 1.5);            /* 3:2 landscape */
-  gap: 16px 32px;                                          /* row / col gap */
+  row-gap: var(--row-gap);
+  column-gap: 32px;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: none;
