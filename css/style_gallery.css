@@ -108,13 +108,16 @@ body {
 
 @media (max-width: 600px) {
 
-  /* Whole page becomes a simple vertical stack */
+  /* Whole page: simple vertical stack, centered */
   .wrap {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 16px 0 32px;
-    gap: 16px;                 /* space between logo and first photo */
+    align-items: center;     /* center children horizontally */
+    justify-content: flex-start;
+    width: 100%;
+    padding: 24px 0 32px;   /* top / bottom white space */
+    gap: 16px;              /* space between logo and first photo */
+    height: auto;           /* override desktop 100vh */
   }
 
   /* Logo centered at the top */
@@ -125,25 +128,38 @@ body {
   }
 
   .brand img {
-    width: 130px;              /* tweak as you like */
+    width: 120px;
+    height: auto;
   }
 
-  /* Gallery: vertical list of images */
+  /* Gallery: full-width vertical feed */
   .grid {
-    display: flex;
+    display: flex !important;     /* override desktop grid */
     flex-direction: column;
+    align-items: center;          /* center items horizontally */
     width: 100%;
-    padding: 0 4px;            /* narrow side padding */
-    gap: 4px;                  /* <<< vertical gap between photos */
-    overflow: visible;         /* no horizontal scroll */
+    gap: 4px;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    height: auto;
+    transform: none !important;   /* remove desktop translateY */
   }
 
   /* Each photo card */
   .item {
-    width: 99%;                /* almost full width */
-    margin: 0 auto;            /* center it */
-    aspect-ratio: 3 / 2;       /* landscape */
-    border-radius: 0px;
+    width: 100%;                  /* as wide as the screen */
+    max-width: 99%;
+    aspect-ratio: 3 / 2;
+    border-radius: 0;
+    overflow: hidden;
+    margin: 0;   
+  }
+
+  .item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 }
-
