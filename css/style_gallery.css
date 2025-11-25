@@ -28,9 +28,9 @@ body {
   height: 100vh;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  column-gap: clamp(16px, 3vw, 32px);   /* was up to 72px */
-  padding: var(--wrap-pad-y) 16px;      /* less side padding */
+  align-items: stretch;                 /* 🔑 both columns full height */
+  column-gap: clamp(32px, 5vw, 72px);
+  padding: var(--wrap-pad-y) 32px;      /* symmetric top/bottom padding */
 }
 
 /* Logo block */
@@ -50,13 +50,12 @@ body {
 
 /* GLOBAL TILE HEIGHT (controls everything) */
 :root {
-  --wrap-pad-y: 8px;      /* symmetric top/bottom padding */
-  --row-gap: 8px;         /* gap between the two rows */
-  --height-buffer: 16px;  /* extra breathing room so bottom row isn't cut */
-
-  /* 2 rows + gap + padding + buffer = a bit less than full viewport height */
+  --wrap-pad-y: 0px;   /* equal top & bottom padding */
+  --row-gap: 5px;      /* vertical gap between rows */
+  --grid-offset: -8px;
+  /* Two rows + one gap + top & bottom padding = 100vh */
   --tile-h: calc(
-    (100vh - var(--height-buffer) - (var(--wrap-pad-y) * 2) - var(--row-gap)) / 2
+    (100vh - (var(--wrap-pad-y) * 2) - var(--row-gap)) / 2
   );
 }
 
@@ -64,16 +63,18 @@ body {
 
 .grid {
   width: 100%;
+  height: 100%;                         /* fill the column height */
   display: grid;
   grid-auto-flow: column;
-  grid-template-rows: repeat(2, minmax(0, var(--tile-h)));
+  grid-template-rows: repeat(2, var(--tile-h));
   grid-auto-columns: calc(var(--tile-h) * 1.5);
   row-gap: var(--row-gap);
-  column-gap: 32px;
+  column-gap: 5px;
   overflow-x: auto;
   overflow-y: hidden;
-  padding-bottom: 0;   /* important: no extra vertical padding */
+  padding: 0;                           /* no extra vertical padding */
   scrollbar-width: none;
+  transform: translateY(var(--grid-offset));
 }
 
 .grid::-webkit-scrollbar {
