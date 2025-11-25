@@ -50,12 +50,13 @@ body {
 
 /* GLOBAL TILE HEIGHT (controls everything) */
 :root {
-  --wrap-pad-y: 8px;          /* was 24px – less vertical padding */
-  --row-gap: 8px;             /* was 16px – smaller gap between rows */
+  --wrap-pad-y: 8px;      /* symmetric top/bottom padding */
+  --row-gap: 8px;         /* gap between the two rows */
+  --height-buffer: 16px;  /* extra breathing room so bottom row isn't cut */
 
-  /* 2 rows that together fill the viewport height */
+  /* 2 rows + gap + padding + buffer = a bit less than full viewport height */
   --tile-h: calc(
-    (100vh - (var(--wrap-pad-y) * 2) - var(--row-gap)) / 2
+    (100vh - var(--height-buffer) - (var(--wrap-pad-y) * 2) - var(--row-gap)) / 2
   );
 }
 
@@ -68,12 +69,10 @@ body {
   grid-template-rows: repeat(2, minmax(0, var(--tile-h)));
   grid-auto-columns: calc(var(--tile-h) * 1.5);
   row-gap: var(--row-gap);
-  column-gap: 12px;                     /* was 32px */
+  column-gap: 32px;
   overflow-x: auto;
   overflow-y: hidden;
-  scroll-snap-type: none;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 0;                    /* remove extra bottom gap */
+  padding-bottom: 0;   /* important: no extra vertical padding */
   scrollbar-width: none;
 }
 
@@ -86,7 +85,7 @@ body {
 .item {
   width: 100%;
   height: 100%;
-  border-radius: 18px;
+  border-radius: 0 px;
   overflow: hidden;
   background: #111;
 }
