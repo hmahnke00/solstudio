@@ -29,8 +29,8 @@ body {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  column-gap: clamp(32px, 5vw, 72px);
-  padding: var(--wrap-pad-y) 32px;
+  column-gap: clamp(16px, 3vw, 32px);   /* was up to 72px */
+  padding: var(--wrap-pad-y) 16px;      /* less side padding */
 }
 
 /* Logo block */
@@ -40,7 +40,7 @@ body {
   justify-content: center;
 }
 .brand img {
-  width: clamp(260px, 30vh, 420px);   
+  width: clamp(200px, 24vh, 340px);   /* was 260px–420px */
   height: auto;
   opacity: 0.9;
 }
@@ -50,11 +50,13 @@ body {
 
 /* GLOBAL TILE HEIGHT (controls everything) */
 :root {
-  --wrap-pad-y: 24px;     /* vertical padding on .wrap (matches .wrap padding) */
-  --row-gap: 16px;        /* vertical gap between the two rows in .grid */
+  --wrap-pad-y: 8px;          /* was 24px – less vertical padding */
+  --row-gap: 8px;             /* was 16px – smaller gap between rows */
 
-  /* Solve for tile height so 2 tiles + gap + padding = viewport height */
-  --tile-h: calc((100vh - (var(--wrap-pad-y) * 2) - var(--row-gap)) / 2);
+  /* 2 rows that together fill the viewport height */
+  --tile-h: calc(
+    (100vh - (var(--wrap-pad-y) * 2) - var(--row-gap)) / 2
+  );
 }
 
 /* MAIN GALLERY GRID: 2 rows, width & height based on vh */
@@ -62,16 +64,16 @@ body {
 .grid {
   width: 100%;
   display: grid;
-  grid-auto-flow: column;                                  /* scroll sideways */
-  grid-template-rows: repeat(2, minmax(0, var(--tile-h))); /* 2 × tile height */
-  grid-auto-columns: calc(var(--tile-h) * 1.5);            /* 3:2 landscape */
+  grid-auto-flow: column;
+  grid-template-rows: repeat(2, minmax(0, var(--tile-h)));
+  grid-auto-columns: calc(var(--tile-h) * 1.5);
   row-gap: var(--row-gap);
-  column-gap: 32px;
+  column-gap: 12px;                     /* was 32px */
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: none;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 8px;
+  padding-bottom: 0;                    /* remove extra bottom gap */
   scrollbar-width: none;
 }
 
