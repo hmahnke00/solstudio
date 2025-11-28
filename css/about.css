@@ -1,0 +1,171 @@
+/* ======================================================================
+   ABOUT PAGE – Sol Studio
+   Dedicated stylesheet for about.html
+   ====================================================================== */
+   @import url('https://fonts.googleapis.com/css2?family=Slackside+One&display=swap');
+   *,
+   *::before,
+   *::after {
+     box-sizing: border-box;
+   }
+   
+   /* Wrapper -------------------------------------------------------------- */
+   
+   .about-hero {
+     position: relative;
+     max-width: 1200px;
+     margin: 0 auto;
+     padding: 24px 32px 64px;   /* tighter top + sides */
+     overflow: hidden;
+     font-family: 'Slackside One', cursive;
+   }
+   
+   /* Background watermark ------------------------------------------------- */
+   
+   .about-bg-sun {
+     position: absolute;
+     right: 0%;
+     top: 50px;
+     width: 100%;
+     opacity: 0.03;
+     z-index: 0;
+     pointer-events: none;
+   }
+   
+   /* Top row: surf image + vertical text --------------------------------- */
+   
+   .about-top {
+     display: flex;
+     justify-content: space-between;
+     align-items: flex-start;
+     gap: 32px;
+     position: relative;
+     z-index: 2;
+   }
+   
+   .about-image {
+     width: 50%;                 /* a bit wider, like the mock */
+     height: auto;
+     object-fit: cover;
+   }
+   
+   /* vertical column on the right */
+   
+   .about-vertical-wrapper {
+     flex: 0 0 auto;
+     display: flex;
+     align-items: center;
+     padding-top: 115px;          /* drop “SOL STUDIO” down a bit */
+     padding-right: 570px;
+     position: relative;
+   }
+   
+   /* thin vertical line behind text */
+   .about-vertical-wrapper::before {
+     content: "";
+     position: absolute;
+     left: 50%;
+     top: 0;
+     transform: translateX(-50%);
+     height: 220px;
+     border-left: 1px solid #222;
+   }
+   
+   .about-vertical {
+     writing-mode: vertical-rl;
+     text-orientation: mixed;
+     letter-spacing: 0.2em;
+     font-size: 0.95rem;
+     text-transform: uppercase;
+   }
+   
+   /* Center logo ---------------------------------------------------------- */
+   
+   .about-center-logo {
+    position: absolute;
+    left: 50%;
+    top: 35%;                 /* move to vertical center */
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    pointer-events: none;     /* lets text be selectable under it */
+  }
+   
+   .about-center-logo img {
+     width: 230px;
+     height: auto;
+   }
+   
+   /* Text block ----------------------------------------------------------- */
+   
+   .about-intro-block {
+     position: relative;
+     margin-top: 100px;          /* text sits just under logo */
+     margin-left: auto;
+     width: 44%;                 /* right-hand column */
+     z-index: 2;
+     padding-left: 54px;         /* room for crosshair lines */
+   }
+   
+   /* crosshair lines to the left of text */
+   .about-lines::before,
+   .about-lines::after {
+     content: "";
+     position: absolute;
+     left: 18px;
+     border-color: #222;
+     border-style: solid;
+   }
+   
+   .about-lines::before {
+     top: 8px;
+     height: 120px;
+     border-left-width: 1px;
+   }
+   
+   .about-lines::after {
+     top: 8px;
+     width: 40px;
+     border-top-width: 1px;
+   }
+   
+   /* Paragraph styling – uses site’s default font */
+   .about-text p {
+    margin: 0 0 1rem;
+    line-height: 1.6;
+    font-size: 1rem;
+    font-family: 'Slackside One', cursive;
+    letter-spacing: 0.3px;
+  }
+   
+   /* Responsive tweaks ---------------------------------------------------- */
+   
+   @media (max-width: 900px) {
+     .about-hero {
+       padding: 20px 20px 48px;
+     }
+   
+     .about-top {
+       flex-direction: column;
+       gap: 20px;
+     }
+   
+     .about-image {
+       width: 100%;
+     }
+   
+     .about-vertical-wrapper::before {
+       display: none;            /* simplify on mobile */
+     }
+   
+     .about-center-logo {
+       position: static;
+       transform: none;
+       margin: 16px auto 0;
+     }
+   
+     .about-intro-block {
+       width: 100%;
+       margin-top: 40px;
+       padding-left: 44px;
+     }
+   }

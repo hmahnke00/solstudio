@@ -28,7 +28,7 @@ body {
   padding-top: 30px;
   overflow: hidden;
   isolation: isolate; /* so the overlay sits above the background */
-  background-image: url("Branding/Untitled-1.png"); /* Replace with your image */
+  background-image: url("../Branding/pavones_background.png"); /* Replace with your image */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
