@@ -8,103 +8,152 @@
    *::after {
      box-sizing: border-box;
    }
+
+:root{
+  /* Image position nudges (desktop) */
+  --about-image-nudge-x: 40px; /* + moves right, - moves left */
+  --about-image-nudge-y: -35px; /* + moves down,  - moves up  */
+
+  /* Text body position nudges (desktop) */
+  --about-text-nudge-x: -180px; /* + moves right, - moves left */
+  --about-text-nudge-y: -18px; /* + moves down,  - moves up  */
+
+  /* Vertical label position nudges (desktop) */
+  --about-vertical-nudge-x: 0px; /* + right, - left */
+  --about-vertical-nudge-y: -22px;   /* + down,  - up   */
+}
    
    /* Wrapper -------------------------------------------------------------- */
    
    .about-hero {
-     position: relative;
-     max-width: 1200px;
-     margin: 0 auto;
-     padding: 24px 32px 64px;   /* tighter top + sides */
-     overflow: hidden;
-     font-family: 'Slackside One', cursive;
-   }
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  /* fluid padding that scales with screen size */
+  padding: clamp(20px, 3.5vw, 72px);
+
+  overflow: hidden;
+  font-family: 'Slackside One', cursive;
+
+  /* desktop grid: left (image) + right (text) */
+  display: grid;
+  grid-template-columns: minmax(520px, 1.3fr) minmax(360px, 1fr);
+  grid-template-rows: auto 1fr;
+  column-gap: clamp(24px, 5vw, 110px);
+  row-gap: clamp(18px, 4vw, 64px);
+  align-items: start;
+}
    
    /* Background watermark ------------------------------------------------- */
    
    .about-bg-sun {
-     position: absolute;
-     right: 0%;
-     top: 50px;
-     width: 100%;
-     opacity: 0.03;
-     z-index: 0;
-     pointer-events: none;
-   }
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  width: clamp(800px, 90vw, 1200px);
+  height: auto;
+  opacity: 0.04;   /* adjust to taste */
+  z-index: 1;
+  pointer-events: none;
+}
    
    /* Top row: surf image + vertical text --------------------------------- */
    
    .about-top {
-     display: flex;
-     justify-content: space-between;
-     align-items: flex-start;
-     gap: 32px;
-     position: relative;
-     z-index: 2;
-   }
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  display: grid;
+  grid-template-columns: 1fr auto; /* image + vertical label */
+  gap: clamp(14px, 2.6vw, 34px);
+  align-items: center;
+
+  position: relative;
+  z-index: 0;
+}
    
    .about-image {
-     width: 50%;                 /* a bit wider, like the mock */
-     height: auto;
-     object-fit: cover;
-   }
+  width: 100%;
+  height: auto;
+  max-height: clamp(280px, 44vh, 560px);
+  object-fit: cover;
+  display: block;
+  position: relative;
+  transform: translate(var(--about-image-nudge-x), var(--about-image-nudge-y));
+}
    
    /* vertical column on the right */
    
-   .about-vertical-wrapper {
-     flex: 0 0 auto;
-     display: flex;
-     align-items: center;
-     padding-top: 115px;          /* drop “SOL STUDIO” down a bit */
-     padding-right: 570px;
-     position: relative;
-   }
+.about-vertical-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transform: translate(
+  var(--about-vertical-nudge-x),
+  var(--about-vertical-nudge-y)
+);
+  position: relative;
+}
    
    /* thin vertical line behind text */
    .about-vertical-wrapper::before {
-     content: "";
-     position: absolute;
-     left: 50%;
-     top: 0;
-     transform: translateX(-50%);
-     height: 220px;
-     border-left: 1px solid #222;
-   }
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: clamp(140px, 18vh, 240px);
+  border-left: 1px solid #222;
+  opacity: 0.75;
+}
    
    .about-vertical {
-     writing-mode: vertical-rl;
-     text-orientation: mixed;
-     letter-spacing: 0.2em;
-     font-size: 0.95rem;
-     text-transform: uppercase;
-   }
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  font-size: clamp(16px, 3vw, 34px);
+  text-transform: uppercase;
+
+  /* keep text on top of the line */
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.0);
+  padding: 0 2px;
+}
    
    /* Center logo ---------------------------------------------------------- */
    
    .about-center-logo {
-    position: absolute;
-    left: 50%;
-    top: 35%;                 /* move to vertical center */
-    transform: translate(-50%, -50%);
-    z-index: 3;
-    pointer-events: none;     /* lets text be selectable under it */
-  }
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  pointer-events: none;
+}
    
    .about-center-logo img {
-     width: 230px;
-     height: auto;
-   }
+  width: clamp(150px, 15vw, 320px);
+  height: auto;
+  display: block;
+}
    
    /* Text block ----------------------------------------------------------- */
    
    .about-intro-block {
-     position: relative;
-     margin-top: 100px;          /* text sits just under logo */
-     margin-left: auto;
-     width: 44%;                 /* right-hand column */
-     z-index: 2;
-     padding-left: 54px;         /* room for crosshair lines */
-   }
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  width: 100%;
+  max-width: 70ch;
+  padding-left: clamp(44px, 4vw, 64px); /* room for crosshair lines */
+  transform: translate(var(--about-text-nudge-x), var(--about-text-nudge-y));
+}
    
    /* crosshair lines to the left of text */
    .about-lines::before,
