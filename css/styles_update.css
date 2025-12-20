@@ -1,6 +1,4 @@
 
-html { outline: 4px solid hotpink; }
-
 :root {
   --pad: clamp(12px, 2vw, 24px);
 }
