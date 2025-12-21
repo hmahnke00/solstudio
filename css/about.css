@@ -185,6 +185,13 @@
     font-family: 'Slackside One', cursive;
     letter-spacing: 0.3px;
   }
+
+  /* TEMP: remove all decorative text lines */
+.about-vertical-wrapper::before,
+.about-lines::before,
+.about-lines::after {
+  display: none;
+}
    
    /* Responsive tweaks ---------------------------------------------------- */
    
