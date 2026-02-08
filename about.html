@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About – Sol Studio</title>
 
     <!-- Global site styles -->
@@ -20,7 +21,18 @@
 
     <!-- Top row: photo + vertical text -->
     <div class="about-top">
-        <img src="./about_photos/backside_bottom_turn.jpg" class="about-image" alt="Surfer">
+        <picture>
+            <!-- Mobile image -->
+            <source
+                media="(max-width: 900px)"
+                srcset="./about_photos/mammoth_climbing.jpeg">
+
+            <!-- Desktop image -->
+            <img
+                src="./about_photos/backside_bottom_turn.jpg"
+                class="about-image"
+                alt="Surfer">
+        </picture>
 
         <div class="about-vertical-wrapper">
             <div class="about-vertical">SOL STUDIO</div>

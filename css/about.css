@@ -1,163 +1,244 @@
+@import url('https://fonts.googleapis.com/css2?family=Slackside+One&display=swap');
+html, body{
+  height: 100%;
+  overflow: hidden;
+}
+
+body{
+  margin: 0;
+}
+
+/* Full-screen stage that centers the artboard */
+.stage{
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* Fixed artboard (Figma frame) scaled to fit */
+.artboard{
+  width: 1512px;
+  height: 982px;
+  transform-origin: center;
+  transform: scale(var(--ui-scale, 1));
+}
+
 /* ======================================================================
-   ABOUT PAGE – Sol Studio
-   Dedicated stylesheet for about.html
+   ABOUT PAGE – Sol Studio (rewrite)
+   Goals:
+   - Preserve desktop + mobile layout
+   - Use grid/gap/padding/margins for alignment (no text translate)
+   - Keep small "image framing" nudges only
    ====================================================================== */
-   @import url('https://fonts.googleapis.com/css2?family=Slackside+One&display=swap');
+
+
    *,
    *::before,
    *::after {
      box-sizing: border-box;
    }
+   
+   /* -------------------------------------------------------
+      Alignment knobs (desktop)
+      ------------------------------------------------------- */
+   :root{
+     /* page padding */
+     --about-pad: 16px;
+   
+     /* layout proportions: image column vs text column */
+     --about-col-left: 700px;
+     --about-col-right: 520px;
+   
+     /* spacing between columns + rows */
+     --about-col-gap: 80px;
+     --about-row-gap: 48px;
 
-:root{
-  /* Image position nudges (desktop) */
-  --about-image-nudge-x: 40px; /* + moves right, - moves left */
-  --about-image-nudge-y: -35px; /* + moves down,  - moves up  */
+     /* artboard-locked (no vw/clamp) */
+     --about-top-gap: 28px;
+     --about-watermark-width: 1100px;
+     --about-vertical-font-size: 30px;
+     --about-logo-size: 230px;
+   
+     /* image “framing” nudges (small only) */
+     --about-image-nudge-x: 0px;   /* + right, - left */
+     --about-image-nudge-y: 0px;  /* + down,  - up  */
 
-  /* Text body position nudges (desktop) */
-  --about-text-nudge-x: -180px; /* + moves right, - moves left */
-  --about-text-nudge-y: -18px; /* + moves down,  - moves up  */
+     /* picture container nudges (moves the whole hero image block) */
+     --about-picture-shift-x: 60px;  /* right (+) / left (-) */
+     --about-picture-shift-y: -30px;  /* down (+) / up (-) */
 
-  /* Vertical label position nudges (desktop) */
-  --about-vertical-nudge-x: 0px; /* + right, - left */
-  --about-vertical-nudge-y: -22px;   /* + down,  - up   */
-}
+     /* image size (desktop) */
+     --about-image-max-height: 500px; /* controls image height/crop */
+
+     /* text block nudges (desktop) */
+     --about-text-nudge-x: -100px; /* left is negative */
+     --about-text-nudge-y: -8px;                     /* up is negative */
+   
+     /* vertical label nudges */
+     --about-vertical-nudge-x: 10px;
+     --about-vertical-nudge-y: -0px;
+   
+     /* typography */
+     --about-font: 'Slackside One', cursive;
+     --about-text-max: 70ch;
+     --about-line: 1.6;
+   
+     /* watermark */
+     --about-watermark-opacity: 0.04;
+   }
    
    /* Wrapper -------------------------------------------------------------- */
+   .about-hero{
+     position: relative;
+     max-width: 1400px;
+     margin: 0 auto;
+     padding: var(--about-pad);
+     overflow: hidden;
    
-   .about-hero {
-  position: relative;
-  max-width: 1400px;
-  margin: 0 auto;
-
-  /* fluid padding that scales with screen size */
-  padding: clamp(20px, 3.5vw, 72px);
-
-  overflow: hidden;
-  font-family: 'Slackside One', cursive;
-
-  /* desktop grid: left (image) + right (text) */
-  display: grid;
-  grid-template-columns: minmax(520px, 1.3fr) minmax(360px, 1fr);
-  grid-template-rows: auto 1fr;
-  column-gap: clamp(24px, 5vw, 110px);
-  row-gap: clamp(18px, 4vw, 64px);
-  align-items: start;
-}
+     font-family: var(--about-font);
+   
+     display: grid;
+     grid-template-columns: var(--about-col-left) var(--about-col-right);
+     grid-template-rows: auto 1fr;
+     column-gap: var(--about-col-gap);
+     row-gap: var(--about-row-gap);
+     align-items: start;
+   }
    
    /* Background watermark ------------------------------------------------- */
+   .about-bg-sun{
+     position: absolute;
+     left: 50%;
+     top: 50%;
+     transform: translate(-50%, -50%);
+     width: var(--about-watermark-width);
+     height: auto;
+     opacity: var(--about-watermark-opacity);
+     z-index: 1;
+     pointer-events: none;
+   }
    
-   .about-bg-sun {
-  position: absolute;
-  left: 50%;
-  top: 46%;
-  transform: translate(-50%, -50%);
-  width: clamp(800px, 90vw, 1200px);
-  height: auto;
-  opacity: 0.04;   /* adjust to taste */
-  z-index: 1;
-  pointer-events: none;
-}
+   /* Top row: photo + vertical text -------------------------------------- */
+   .about-top{
+     grid-column: 1 / 2;
+     grid-row: 1 / 2;
    
-   /* Top row: surf image + vertical text --------------------------------- */
+     display: grid;
+     grid-template-columns: 1fr auto; /* image + vertical label */
+     gap: var(--about-top-gap);
+     align-items: center;
    
-   .about-top {
-  grid-column: 1 / 2;
-  grid-row: 1 / 2;
-  display: grid;
-  grid-template-columns: 1fr auto; /* image + vertical label */
-  gap: clamp(14px, 2.6vw, 34px);
-  align-items: center;
+     position: relative;
+     
+     z-index: 2;
+   }
+   
+   /* Make <picture> behave predictably */
+   .about-top picture{
+     display: block;
+     width: 100%;
 
-  position: relative;
-  z-index: 0;
-}
+     /* Option B: move the container, not the <img> */
+     position: relative;
+     left: var(--about-picture-shift-x);
+     top: var(--about-picture-shift-y);
+   }
    
-   .about-image {
-  width: 100%;
-  height: auto;
-  max-height: clamp(280px, 44vh, 560px);
-  object-fit: cover;
-  display: block;
-  position: relative;
-  transform: translate(var(--about-image-nudge-x), var(--about-image-nudge-y));
-}
+   .about-image{
+    width: 100%;
+    height: auto;
+    max-height: var(--about-image-max-height);
+  
+    /* show the entire image, no cropping */
+    object-fit: contain;
+    object-position: center center;
+  
+    display: block;
+    transform: none; /* prevent clipping */
+  }
    
-   /* vertical column on the right */
+   /* Vertical column on the right */
+   .about-vertical-wrapper{
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 0;
    
-.about-vertical-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  transform: translate(
-  var(--about-vertical-nudge-x),
-  var(--about-vertical-nudge-y)
-);
-  position: relative;
-}
+     transform: translate(var(--about-vertical-nudge-x), var(--about-vertical-nudge-y));
+     position: relative;
+   }
    
-   /* thin vertical line behind text */
-   .about-vertical-wrapper::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  height: clamp(140px, 18vh, 240px);
-  border-left: 1px solid #222;
-  opacity: 0.75;
-}
+   /* (Optional decorative line behind vertical text) */
+   .about-vertical-wrapper::before{
+     content: "";
+     position: absolute;
+     left: 50%;
+     top: 50%;
+     transform: translate(-50%, -50%);
+     height: clamp(140px, 18vh, 240px);
+     border-left: 1px solid #222;
+     opacity: 0.75;
+   }
    
-   .about-vertical {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  letter-spacing: 0.02em;
-  line-height: 1.35;
-  font-size: clamp(16px, 3vw, 34px);
-  text-transform: uppercase;
-
-  /* keep text on top of the line */
-  position: relative;
-  z-index: 1;
-  background: rgba(255, 255, 255, 0.0);
-  padding: 0 2px;
-}
+   .about-vertical{
+     writing-mode: vertical-rl;
+     text-orientation: mixed;
+     letter-spacing: 0.02em;
+     line-height: 1.35;
+     font-size: var(--about-vertical-font-size);
+     text-transform: uppercase;
+   
+     position: relative;
+     top: 20px;          /* up = negative, down = positive */
+     left: 5px; 
+     z-index: 1;
+     padding: 0 2px;
+     background: rgba(255, 255, 255, 0);
+   }
    
    /* Center logo ---------------------------------------------------------- */
+   .about-center-logo{
+     position: absolute;
+     left: 50%;
+     top: 50%;
+     transform: translate(-50%, -50%);
+     z-index: 3;
+     pointer-events: none;
+   }
    
-   .about-center-logo {
-  position: absolute;
-  left: 50%;
-  top: 45%;
-  transform: translate(-50%, -50%);
-  z-index: 3;
-  pointer-events: none;
-}
-   
-   .about-center-logo img {
-  width: clamp(150px, 15vw, 320px);
-  height: auto;
-  display: block;
-}
+   .about-center-logo img{
+     width: var(--about-logo-size);
+     height: auto;
+     display: block;
+   }
    
    /* Text block ----------------------------------------------------------- */
+   .about-intro-block{
+     grid-column: 2 / 3;
+     grid-row: 2 / 3;
    
-   .about-intro-block {
-  grid-column: 2 / 3;
-  grid-row: 2 / 3;
-  position: relative;
-  z-index: 2;
-  margin: 0;
-  width: 100%;
-  max-width: 70ch;
-  padding-left: clamp(44px, 4vw, 64px); /* room for crosshair lines */
-  transform: translate(var(--about-text-nudge-x), var(--about-text-nudge-y));
-}
+     position: relative;
+     top: var(--about-text-nudge-y);   /* up = negative, down = positive */
+     left: var(--about-text-nudge-x);  /* left = negative, right = positive */
+     z-index: 2;
+     margin: 0;
+     width: 100%;
+     max-width: var(--about-text-max);
    
-   /* crosshair lines to the left of text */
+     /* IMPORTANT: alignment is done with grid + spacing, not translate */
+     align-self: start;
+   
+     /* if you want the text a touch lower/higher, use margin-top */
+      margin-top: 0px;
+      margin-left: 0px; 
+   }
+   
+   /* (Optional crosshair lines — currently off below) */
    .about-lines::before,
-   .about-lines::after {
+   .about-lines::after{
      content: "";
      position: absolute;
      left: 18px;
@@ -165,63 +246,140 @@
      border-style: solid;
    }
    
-   .about-lines::before {
+   .about-lines::before{
      top: 8px;
      height: 120px;
      border-left-width: 1px;
    }
    
-   .about-lines::after {
+   .about-lines::after{
      top: 8px;
      width: 40px;
      border-top-width: 1px;
    }
    
-   /* Paragraph styling – uses site’s default font */
-   .about-text p {
-    margin: 0 0 1rem;
-    line-height: 1.6;
-    font-size: 1rem;
-    font-family: 'Slackside One', cursive;
-    letter-spacing: 0.3px;
-  }
-
-  /* TEMP: remove all decorative text lines */
-.about-vertical-wrapper::before,
-.about-lines::before,
-.about-lines::after {
-  display: none;
-}
+   /* Paragraph styling */
+   .about-text p{
+     margin: 0 0 1rem;
+     line-height: var(--about-line);
+     font-size: 1rem;
+     font-family: var(--about-font);
+     letter-spacing: 0.3px;
+     max-width: 62ch; /* nice line length on desktop */
+   }
    
-   /* Responsive tweaks ---------------------------------------------------- */
+   /* TEMP: remove all decorative text lines (matches your current intent) */
+   .about-vertical-wrapper::before,
+   .about-lines::before,
+   .about-lines::after{
+     display: none;
+   }
    
-   @media (max-width: 900px) {
-     .about-hero {
-       padding: 20px 20px 48px;
+   /* =========================================================
+      Mobile-only overrides
+      ========================================================= */
+   @media (max-width: 0px){
+   
+     /* reset visual nudges so mobile is predictable */
+     :root{
+       --about-image-nudge-x: 0px;
+       --about-image-nudge-y: 0px;
+       --about-vertical-nudge-x: 0px;
+       --about-vertical-nudge-y: 0px;
+       --about-watermark-opacity: 0.05;
+       --about-picture-shift-x: 0px;
+       --about-picture-shift-y: 0px;
      }
    
-     .about-top {
-       flex-direction: column;
-       gap: 20px;
+     .about-hero{
+       grid-template-columns: 1fr;
+       grid-template-rows: auto auto;
+       column-gap: 0;
+       row-gap: clamp(18px, 4vw, 36px);
+       overflow-x: hidden;
      }
    
-     .about-image {
-       width: 100%;
+     .about-top{
+       grid-column: 1 / -1;
+       grid-row: 1 / 2;
+   
+       grid-template-columns: 1fr;
+       grid-template-rows: auto auto;
+       align-items: start;
      }
    
-     .about-vertical-wrapper::before {
-       display: none;            /* simplify on mobile */
-     }
-   
-     .about-center-logo {
-       position: static;
+     /* prevent mobile image cropping */
+     .about-top picture img,
+     .about-image{
+       width: 100% !important;
+       height: auto !important;
+       max-height: none !important;
+       object-fit: contain !important;
+       display: block;
        transform: none;
-       margin: 16px auto 0;
      }
    
-     .about-intro-block {
-       width: 100%;
-       margin-top: 40px;
-       padding-left: 44px;
+     /* Center logo stays centered on screen (your current behavior) */
+     .about-center-logo{
+       position: fixed;
+       left: 50%;
+       top: 50%;
+       transform: translate(-50%, -50%);
+       z-index: 3;
+       pointer-events: none;
+     }
+   
+     /* wordmark reads normally on mobile */
+     .about-vertical{
+       writing-mode: horizontal-tb !important;
+     }
+   
+     /* watermark sits softly in the background on mobile */
+     .about-bg-sun{
+       position: fixed;
+       left: 50%;
+       top: 50%;
+       transform: translate(-50%, -50%);
+       width: 160vw;
+       opacity: var(--about-watermark-opacity);
+       z-index: 1;
+       pointer-events: none;
+     }
+   
+     /* text becomes full width on mobile */
+     .about-intro-block{
+       grid-column: 1 / -1;
+       grid-row: 2 / 3;
+       max-width: none;
+     }
+   
+     .about-text p{
+       max-width: none;
      }
    }
+
+/* ===== Desktop composition stabilization ===== */
+@media (min-width: 99999px){
+  :root{
+    /* Freeze the biggest "breathing" factors so desktop layouts match */
+    --about-pad: 56px;
+    --about-col-gap: 80px;
+    --about-row-gap: 48px;
+
+    /* Lock the column widths so the split doesn’t slide around */
+    --about-col-left: 860px;
+    --about-col-right: 520px;
+
+    /* Lock text nudges on desktop so they don’t scale with vw */
+    --about-text-nudge-x: -130px;
+    --about-text-nudge-y: -12px;
+
+    /* Lock the internal gap between image and vertical label */
+    --about-top-gap: 28px;
+  }
+
+  /* Stop the watermark from scaling with viewport width */
+  .about-bg-sun{
+    width: 1100px;
+  }
+}
