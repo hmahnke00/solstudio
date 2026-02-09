@@ -38,7 +38,6 @@
           </p>
 
           <div class="contact-meta">
-
             <div><span class="label">Response</span> Typically within 48 hours</div>
           </div>
 
@@ -46,8 +45,8 @@
                 action="https://formspree.io/f/mkovgqrd"
                 method="POST">
             <input type="hidden" name="_subject" value="New Sol Studio contact form submission">
-            <input type="hidden" name="_replyto" value="%email%">
-            <input type="hidden" name="_next" value="/thanks.html">
+            <input type="hidden" name="_next" value="https://henrymahnke.github.io/sol_studio_2/thank_you.html">
+
             <div class="row">
               <label>
                 Name
@@ -103,7 +102,6 @@
         const w = document.documentElement.clientWidth;
         const h = document.documentElement.clientHeight;
         const scale = Math.min(w / ART_W, h / ART_H);
-        // reduce subpixel jitter a bit
         const rounded = Math.floor(scale * 10000) / 10000;
         document.documentElement.style.setProperty('--ui-scale', String(rounded));
       }

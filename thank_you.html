@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank You – Sol Studio</title>
+
+  <link id="globalStyles" rel="stylesheet" href="css/style.css">
+  <link id="contactStyles" rel="stylesheet" href="css/contact.css">
+</head>
+
+<body class="contact-page">
+
+  <div class="stage">
+    <div class="artboard">
+
+      <div class="contact-hero">
+
+        <!-- Watermark -->
+        <img src="./Branding/solstudiocutout.png" alt="" class="contact-bg-sun">
+
+        <!-- Center logo -->
+        <div class="contact-center-logo">
+          <img src="./Branding/solstudiocutout.png" alt="Sol Studio logo">
+        </div>
+
+        <!-- Left: vertical label -->
+        <div class="contact-vertical-wrapper">
+          <div class="contact-vertical">SOL STUDIO</div>
+        </div>
+
+        <!-- Right: thank-you card -->
+        <section class="contact-card" aria-labelledby="thanksTitle">
+          <h1 id="thanksTitle">Thank you</h1>
+
+          <p class="contact-subtitle">
+            Your message has been sent. I’ll get back to you shortly.
+          </p>
+
+          <div class="contact-footer">
+            <a href="index.html">Back to home</a>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Scale the fixed "artboard" to fit the viewport (Figma-like behavior)
+    (function () {
+      const ART_W = 1512; // MacBook Pro 14" logical CSS px
+      const ART_H = 982;
+
+      function fit() {
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        const scale = Math.min(w / ART_W, h / ART_H);
+        // reduce subpixel jitter a bit
+        const rounded = Math.floor(scale * 10000) / 10000;
+        document.documentElement.style.setProperty('--ui-scale', String(rounded));
+      }
+
+      window.addEventListener('resize', fit);
+      fit();
+    })();
+  </script>
+
+</body>
+</html>
