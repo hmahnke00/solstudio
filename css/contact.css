@@ -1,0 +1,227 @@
+@import url('https://fonts.googleapis.com/css2?family=Slackside+One&display=swap');
+
+html, body{
+  height: 100%;
+  overflow: hidden;
+}
+
+body{
+  margin: 0;
+}
+
+/* Stage + artboard (same as About) */
+.stage{
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #fff;
+}
+
+.artboard{
+  width: 1512px;
+  height: 982px;
+  transform-origin: center;
+  transform: scale(var(--ui-scale, 1));
+  font-family: 'Slackside One', cursive;
+}
+
+/* Contact layout knobs */
+:root{
+  --contact-pad: 28px;
+
+  --contact-watermark-width: 1150px;
+  --contact-watermark-opacity: 0.045;
+
+  --contact-logo-size: 230px;
+
+  --contact-vertical-font-size: 30px;
+  --contact-vertical-x: 0px;
+  --contact-vertical-y: 0px;
+
+  --contact-card-x: 0px;
+  --contact-card-y: 0px;
+
+  --contact-card-width: 560px;
+  --contact-card-padding: 28px;
+
+  --contact-grid-gap: 64px;
+}
+
+.contact-hero{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: var(--contact-pad);
+
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: var(--contact-grid-gap);
+  align-items: center;
+
+  overflow: hidden;
+}
+
+/* Watermark */
+.contact-bg-sun{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--contact-watermark-width);
+  height: auto;
+  opacity: var(--contact-watermark-opacity);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Center logo */
+.contact-center-logo{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.contact-center-logo img{
+  width: var(--contact-logo-size);
+  height: auto;
+  display: block;
+}
+
+/* Vertical label */
+.contact-vertical-wrapper{
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform: translate(var(--contact-vertical-x), var(--contact-vertical-y));
+}
+
+.contact-vertical{
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: var(--contact-vertical-font-size);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+/* Contact card */
+.contact-card{
+  z-index: 2;
+  width: var(--contact-card-width);
+  max-width: 100%;
+  padding: var(--contact-card-padding);
+
+  transform: translate(var(--contact-card-x), var(--contact-card-y));
+
+  /* light glassy panel (optional) */
+  background: rgba(255,255,255,0.70);
+  border: 1px solid rgba(0,0,0,0.08);
+  backdrop-filter: blur(6px);
+}
+
+.contact-card h1{
+  margin: 0 0 12px 0;
+  font-size: 40px;
+  letter-spacing: 0.3px;
+}
+
+.contact-subtitle{
+  margin: 0 0 18px 0;
+  line-height: 1.5;
+  max-width: 52ch;
+  font-size: 16px;
+}
+
+.contact-meta{
+  margin: 0 0 18px 0;
+  display: grid;
+  gap: 8px;
+  font-size: 15px;
+}
+
+.contact-meta .label{
+  display: inline-block;
+  min-width: 72px;
+  opacity: 0.7;
+}
+
+.contact-meta a{
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Form */
+.contact-form{
+  display: grid;
+  gap: 14px;
+}
+
+.contact-form .row{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+label{
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+}
+
+input, select, textarea{
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,0,0,0.18);
+  background: rgba(255,255,255,0.75);
+  outline: none;
+}
+
+textarea{
+  resize: vertical;
+  min-height: 120px;
+}
+
+input:focus, select:focus, textarea:focus{
+  border-color: rgba(0,0,0,0.45);
+}
+
+button{
+  font: inherit;
+  padding: 10px 14px;
+  border: 1px solid rgba(0,0,0,0.25);
+  background: rgba(255,255,255,0.85);
+  cursor: pointer;
+}
+
+button:hover{
+  background: rgba(255,255,255,0.95);
+}
+
+/* Honeypot hidden */
+.hp{
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  height: 0;
+  width: 0;
+  opacity: 0;
+}
+
+.contact-footer{
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.contact-footer a{
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

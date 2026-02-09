@@ -1,12 +1,111 @@
-<body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact – Sol Studio</title>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="gallery.html">Gallery</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="prints.html">Prints</a>
-  </nav>
+  <link id="globalStyles" rel="stylesheet" href="css/style.css">
+  <link id="contactStyles" rel="stylesheet" href="css/contact.css">
+</head>
 
-  
+<body class="contact-page">
+
+  <div class="stage">
+    <div class="artboard">
+
+      <div class="contact-hero">
+
+        <!-- Watermark -->
+        <img src="./Branding/solstudiocutout.png" alt="" class="contact-bg-sun">
+
+        <!-- Center logo -->
+        <div class="contact-center-logo">
+          <img src="./Branding/solstudiocutout.png" alt="Sol Studio logo">
+        </div>
+
+        <!-- Left: vertical label -->
+        <div class="contact-vertical-wrapper">
+          <div class="contact-vertical">SOL STUDIO</div>
+        </div>
+
+        <!-- Right: contact card -->
+        <section class="contact-card" aria-labelledby="contactTitle">
+          <h1 id="contactTitle">Contact</h1>
+
+          <p class="contact-subtitle">
+            For prints, collaborations, licensing, or shoots—send a note below.
+          </p>
+
+          <div class="contact-meta">
+            <div><span class="label">Email</span> <a href="mailto:henry@solstudiophoto.com">henry@solstudiophoto.com</a></div>
+            <div><span class="label">Response</span> Typically within 48 hours</div>
+          </div>
+
+          <form class="contact-form" action="#" method="post">
+            <div class="row">
+              <label>
+                Name
+                <input type="text" name="name" autocomplete="name" required>
+              </label>
+
+              <label>
+                Email
+                <input type="email" name="email" autocomplete="email" required>
+              </label>
+            </div>
+
+            <label>
+              Inquiry type
+              <select name="type">
+                <option value="prints">Prints</option>
+                <option value="collab">Collaboration</option>
+                <option value="licensing">Licensing</option>
+                <option value="shoot">Shoot</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+
+            <label>
+              Message
+              <textarea name="message" rows="6" required></textarea>
+            </label>
+
+            <!-- Honeypot anti-spam (should stay hidden) -->
+            <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off">
+
+            <button type="submit">Send</button>
+          </form>
+
+          <div class="contact-footer">
+            <a href="https://instagram.com/" target="_blank" rel="noreferrer">Instagram</a>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Scale the fixed "artboard" to fit the viewport (Figma-like behavior)
+    (function () {
+      const ART_W = 1512; // MacBook Pro 14" logical CSS px
+      const ART_H = 982;
+
+      function fit() {
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        const scale = Math.min(w / ART_W, h / ART_H);
+        // reduce subpixel jitter a bit
+        const rounded = Math.floor(scale * 10000) / 10000;
+        document.documentElement.style.setProperty('--ui-scale', String(rounded));
+      }
+
+      window.addEventListener('resize', fit);
+      fit();
+    })();
+  </script>
+
 </body>
+</html>

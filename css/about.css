@@ -75,7 +75,7 @@ body{
 
      /* text block nudges (desktop) */
      --about-text-nudge-x: -100px; /* left is negative */
-     --about-text-nudge-y: -8px;                     /* up is negative */
+     --about-text-nudge-y: 0px;                     /* up is negative */
    
      /* vertical label nudges */
      --about-vertical-nudge-x: 10px;
