@@ -38,11 +38,16 @@
           </p>
 
           <div class="contact-meta">
-            <div><span class="label">Email</span> <a href="mailto:henry@solstudiophoto.com">henry@solstudiophoto.com</a></div>
+
             <div><span class="label">Response</span> Typically within 48 hours</div>
           </div>
 
-          <form class="contact-form" action="#" method="post">
+          <form class="contact-form"
+                action="https://formspree.io/f/mkovgqrd"
+                method="POST">
+            <input type="hidden" name="_subject" value="New Sol Studio contact form submission">
+            <input type="hidden" name="_replyto" value="%email%">
+            <input type="hidden" name="_next" value="/thanks.html">
             <div class="row">
               <label>
                 Name
@@ -75,6 +80,7 @@
             <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off">
 
             <button type="submit">Send</button>
+            <p class="form-status" aria-live="polite"></p>
           </form>
 
           <div class="contact-footer">
