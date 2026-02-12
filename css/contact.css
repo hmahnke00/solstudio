@@ -58,7 +58,7 @@ body{ margin: 0; }
   --contact-input-size: 18px;
   --contact-field-gap: 30px;
   --contact-label-gap: 14px;
-  --contact-underline: 1px;
+  --contact-underline: .8px;
 
   /* field text baseline spacing (keeps all fields consistent) */
   --contact-field-pad-top: 6px;
@@ -220,8 +220,8 @@ input:focus{
   background-image: repeating-linear-gradient(
     to bottom,
     transparent 0,
-    transparent calc(var(--contact-textarea-line-step) - 1px),
-    var(--contact-line) calc(var(--contact-textarea-line-step) - 1px),
+    transparent calc(var(--contact-textarea-line-step) - var(--contact-underline)),
+    var(--contact-line) calc(var(--contact-textarea-line-step) - var(--contact-underline)),
     var(--contact-line) var(--contact-textarea-line-step)
   );
   background-size: 100% var(--contact-textarea-line-step);
@@ -231,21 +231,21 @@ input:focus{
   background-clip: content-box;
 
   /* First ruled line appears after the first text line */
-  background-position: 0 var(--contact-textarea-line-step);
+  background-position: 0 0;
 }
 
 .field--message textarea:focus{
   background-image: repeating-linear-gradient(
     to bottom,
     transparent 0,
-    transparent calc(var(--contact-textarea-line-step) - 1px),
-    var(--contact-line-strong) calc(var(--contact-textarea-line-step) - 1px),
+    transparent calc(var(--contact-textarea-line-step) - var(--contact-underline)),
+    var(--contact-line-strong) calc(var(--contact-textarea-line-step) - var(--contact-underline)),
     var(--contact-line-strong) var(--contact-textarea-line-step)
   );
   background-size: 100% var(--contact-textarea-line-step);
   background-origin: content-box;
   background-clip: content-box;
-  background-position: 0 var(--contact-textarea-line-step);
+  background-position: 0 0;
 }
 
 .actions{
