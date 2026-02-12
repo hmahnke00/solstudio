@@ -5,111 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact – Sol Studio</title>
 
-  <link id="globalStyles" rel="stylesheet" href="css/style.css">
-  <link id="contactStyles" rel="stylesheet" href="css/contact.css">
+  <link rel="stylesheet" href="./css/contact.css" />
 </head>
 
-<body class="contact-page">
+<body>
+  <main class="page">
+    <div class="container">
+      <section class="grid" aria-labelledby="contact-title">
+        <div class="left">
+          <header class="header">
+            <h1 id="contact-title">Contact</h1>
+            <p class="subtext">Leave a note and I’ll get back to you!</p>
+          </header>
 
-  <div class="stage">
-    <div class="artboard">
-
-      <div class="contact-hero">
-
-        <!-- Watermark -->
-        <img src="./Branding/solstudiocutout.png" alt="" class="contact-bg-sun">
-
-        <!-- Center logo -->
-        <div class="contact-center-logo">
-          <img src="./Branding/solstudiocutout.png" alt="Sol Studio logo">
-        </div>
-
-        <!-- Left: vertical label -->
-        <div class="contact-vertical-wrapper">
-          <div class="contact-vertical">SOL STUDIO</div>
-        </div>
-
-        <!-- Right: contact card -->
-        <section class="contact-card" aria-labelledby="contactTitle">
-          <h1 id="contactTitle">Contact</h1>
-
-          <p class="contact-subtitle">
-            For prints, collaborations, licensing, or shoots—send a note below.
-          </p>
-
-          <div class="contact-meta">
-            <div><span class="label">Response</span> Typically within 48 hours</div>
-          </div>
-
-          <form class="contact-form"
-                action="https://formspree.io/f/mkovgqrd"
-                method="POST">
-            <input type="hidden" name="_subject" value="New Sol Studio contact form submission">
-            <input type="hidden" name="_next" value="https://henrymahnke.github.io/sol_studio_2/thank_you.html">
-
-            <div class="row">
-              <label>
-                Name
-                <input type="text" name="name" autocomplete="name" required>
-              </label>
-
-              <label>
-                Email
-                <input type="email" name="email" autocomplete="email" required>
-              </label>
+          <form class="form" method="POST" action="https://formspree.io/f/mkovgqrd">
+            <input type="hidden" name="_subject" value="New Sol Studio contact form submission" />
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" name="name" type="text" autocomplete="name" required />
             </div>
 
-            <label>
-              Inquiry type
-              <select name="type">
-                <option value="prints">Prints</option>
-                <option value="collab">Collaboration</option>
-                <option value="licensing">Licensing</option>
-                <option value="shoot">Shoot</option>
-                <option value="other">Other</option>
-              </select>
-            </label>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
 
-            <label>
-              Message
-              <textarea name="message" rows="6" required></textarea>
-            </label>
+            <div class="field">
+              <label for="inquiry">Inquiry</label>
+              <input id="inquiry" name="inquiry" type="text" autocomplete="off" />
+            </div>
 
-            <!-- Honeypot anti-spam (should stay hidden) -->
-            <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off">
+            <div class="field field--message">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="7" required></textarea>
+            </div>
 
-            <button type="submit">Send</button>
-            <p class="form-status" aria-live="polite"></p>
+            <div class="actions">
+              <button class="btn" type="submit">Send it</button>
+            </div>
           </form>
+        </div>
 
-          <div class="contact-footer">
-            <a href="https://instagram.com/" target="_blank" rel="noreferrer">Instagram</a>
-          </div>
-        </section>
+        <div class="right">
+          <figure class="photo">
+            <img src="./about_photos/DSC_4474.jpg" alt="Contact page photo" />
+          </figure>
+        </div>
+      </section>
 
-      </div>
-
+      <footer class="footer" aria-label="Sol Studio">
+        <img class="sun" src="./Branding/solstudiocutout.png" alt="Sol Studio sun logo" />
+      </footer>
     </div>
-  </div>
-
-  <script>
-    // Scale the fixed "artboard" to fit the viewport (Figma-like behavior)
-    (function () {
-      const ART_W = 1512; // MacBook Pro 14" logical CSS px
-      const ART_H = 982;
-
-      function fit() {
-        const w = document.documentElement.clientWidth;
-        const h = document.documentElement.clientHeight;
-        const scale = Math.min(w / ART_W, h / ART_H);
-        const rounded = Math.floor(scale * 10000) / 10000;
-        document.documentElement.style.setProperty('--ui-scale', String(rounded));
-      }
-
-      window.addEventListener('resize', fit);
-      fit();
-    })();
-  </script>
-
+  </main>
 </body>
 </html>

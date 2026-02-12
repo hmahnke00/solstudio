@@ -26,13 +26,6 @@ body{
   transform: scale(var(--ui-scale, 1));
 }
 
-/* ======================================================================
-   ABOUT PAGE – Sol Studio (rewrite)
-   Goals:
-   - Preserve desktop + mobile layout
-   - Use grid/gap/padding/margins for alignment (no text translate)
-   - Keep small "image framing" nudges only
-   ====================================================================== */
 
 
    *,
