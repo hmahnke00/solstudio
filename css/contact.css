@@ -3,7 +3,7 @@
 
 html, body{
   height: 100%;
-  overflow: hidden;
+  overflow: auto; /* allow scroll if the live site has a header or reduced viewport */
 }
 
 body{ margin: 0; }
@@ -24,7 +24,7 @@ body{ margin: 0; }
   --ui-scale: min(
     1,
     calc((100vw - var(--ui-safe)) / var(--artboard-w)),
-    calc((100vh - var(--ui-safe)) / var(--artboard-h))
+    calc((100dvh - var(--ui-safe)) / var(--artboard-h))
   );
 
   /* typography */
@@ -102,12 +102,12 @@ body{ margin: 0; }
 /* Full-screen stage that centers the artboard */
 .page{
   width: 100vw;
-  height: 100vh;
+  min-height: 100dvh;
   display: grid;
   place-items: center;
-  overflow: hidden;
+  overflow: auto;
   background: var(--contact-bg);
-  padding: 16px;
+  padding: 16px 16px 28px;
 }
 
 /* Fixed artboard scaled to fit */
