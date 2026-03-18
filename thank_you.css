@@ -31,7 +31,7 @@
 
   /* --- Text block --- */
   --ty-text-x: 50%;              /* center by default */
-  --ty-text-y: 52%;
+  --ty-text-y: 50%;
   --ty-text-nudge-x: 0px;
   --ty-text-nudge-y: 0px;
 
@@ -48,8 +48,8 @@
   --ty-logo-gap: 14px;
 
   /* Logo placement relative to text */
-  --ty-logo-nudge-x: -20px;
-  --ty-logo-nudge-y: -20px;
+  --ty-logo-nudge-x: 0px;
+  --ty-logo-nudge-y: 0px;
 
   /* Provide a touch of safe padding so nothing clips */
   --ty-safe-pad: 18px;
