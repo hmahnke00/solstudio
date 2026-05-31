@@ -1,0 +1,174 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Slackside+One&display=swap');
+
+/* ======================================================================
+   THANK YOU – Sol Studio
+   Full-bleed background image + centered message + sun logo
+   Includes easy adjustment variables (image / text / logo)
+   ====================================================================== */
+
+*,
+*::before,
+*::after{ box-sizing: border-box; }
+
+:root{
+  /* --- Typography --- */
+  --ty-font: 'Slackside One', cursive;
+  --ty-ink: #111;
+
+  /* --- Background image (set path here) --- */
+  --ty-img-url: url('./Branding/venice_background.jpg');
+  --ty-img-opacity: 0.55;
+
+  /* Image placement + sizing */
+  --ty-img-size: cover;          /* cover or contain */
+  --ty-img-pos-x: 50%;           /* 0%..100% */
+  --ty-img-pos-y: 55%;           /* 0%..100% */
+  --ty-img-scale: 1;             /* 1 = normal, >1 zooms */
+
+  /* Optional overlay to soften image */
+  --ty-overlay-opacity: 0.18;    /* 0..1 */
+
+  /* --- Text block --- */
+  --ty-text-x: 50%;              /* center by default */
+  --ty-text-y: 50%;
+  --ty-text-nudge-x: 0px;
+  --ty-text-nudge-y: 0px;
+
+  --ty-title-size: 60px;
+  --ty-title-opacity: 1;
+
+  --ty-sub-size: 18px;
+  --ty-sub-opacity: 0.9;
+  --ty-sub-gap: 8px;
+
+  /* --- Logo --- */
+  --ty-logo-size: 120px;
+  --ty-logo-opacity: 0.95;
+  --ty-logo-gap: 14px;
+
+  /* Logo placement relative to text */
+  --ty-logo-nudge-x: 0px;
+  --ty-logo-nudge-y: 0px;
+
+  /* Provide a touch of safe padding so nothing clips */
+  --ty-safe-pad: 18px;
+}
+
+html, body{
+  height: 100%;
+  overflow: hidden;
+}
+
+body{
+  margin: 0;
+  font-family: var(--ty-font);
+  color: var(--ty-ink);
+}
+
+/* Stage */
+.thankyou{
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* Background image layer */
+.thankyou::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: var(--ty-img-url);
+  background-size: var(--ty-img-size);
+  background-position: var(--ty-img-pos-x) var(--ty-img-pos-y);
+  background-repeat: no-repeat;
+
+  opacity: var(--ty-img-opacity);
+
+  /* scale without changing layout */
+  transform: scale(var(--ty-img-scale));
+  transform-origin: var(--ty-img-pos-x) var(--ty-img-pos-y);
+}
+
+/* Optional soft white wash to match the airy look */
+.thankyou::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,var(--ty-overlay-opacity));
+}
+
+/* Centered content */
+.ty-content{
+  position: absolute;
+  left: var(--ty-text-x);
+  top: var(--ty-text-y);
+  transform: translate(-50%, -50%) translate(var(--ty-text-nudge-x), var(--ty-text-nudge-y));
+
+  display: grid;
+  place-items: center;
+  text-align: center;
+  gap: var(--ty-sub-gap);
+
+  padding: var(--ty-safe-pad);
+  z-index: 2;
+}
+
+.ty-title{
+  margin: 0;
+  font-size: var(--ty-title-size);
+  line-height: 1.05;
+  font-weight: 400;
+  opacity: var(--ty-title-opacity);
+}
+
+.ty-sub{
+  margin: 0;
+  font-size: var(--ty-sub-size);
+  line-height: 1.2;
+  font-weight: 400;
+  opacity: var(--ty-sub-opacity);
+}
+
+.ty-logo{
+  margin-top: var(--ty-logo-gap);
+  width: var(--ty-logo-size);
+  height: var(--ty-logo-size);
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  opacity: var(--ty-logo-opacity);
+  border: 0;
+  background: transparent;
+
+  transform: translate(var(--ty-logo-nudge-x), var(--ty-logo-nudge-y));
+}
+
+/* Simple nav link if you include one */
+.ty-link{
+  margin-top: 18px;
+  font-size: 18px;
+  color: var(--ty-ink);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(17,17,17,.35);
+}
+
+.ty-link:hover{
+  border-bottom-color: rgba(17,17,17,.75);
+}
+
+@media (max-width: 720px){
+  :root{
+    --ty-title-size: 48px;
+    --ty-sub-size: 16px;
+    --ty-logo-size: 80px;
+    --ty-text-y: 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .thankyou::before{ transform: none; }
+}

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Slackside+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Slackside+One&display=swap');
 html, body{
   height: 100%;
   overflow: hidden;
@@ -6,6 +6,8 @@ html, body{
 
 body{
   margin: 0;
+  background: var(--bg);
+  color: var(--text);
 }
 
 /* Full-screen stage that centers the artboard */
@@ -74,10 +76,11 @@ body{
      --about-vertical-nudge-x: 10px;
      --about-vertical-nudge-y: -0px;
    
-     /* typography */
-     --about-font: 'Slackside One', cursive;
+     /* typography — reference global tokens */
+     --about-font: var(--font-brand);
+     --body-font: var(--font-body);
      --about-text-max: 70ch;
-     --about-line: 1.6;
+     --about-line: 1.7;
    
      /* watermark */
      --about-watermark-opacity: 0.04;
@@ -253,11 +256,12 @@ body{
    
    /* Paragraph styling */
    .about-text p{
-     margin: 0 0 1rem;
+     margin: 0 0 1.25rem;
      line-height: var(--about-line);
-     font-size: 1rem;
-     font-family: var(--about-font);
-     letter-spacing: 0.3px;
+     font-size: 17px;
+     font-family: var(--body-font);
+     font-weight: 300;
+     letter-spacing: 0.01em;
      max-width: 62ch; /* nice line length on desktop */
    }
    

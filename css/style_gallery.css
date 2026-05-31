@@ -17,9 +17,9 @@ body {
 }
 
 body {
-  font-family: 'Slackside One', cursive;
-  background: #ffffff;
-  color: #000000;
+  font-family: var(--font-brand);
+  background: var(--bg);
+  color: var(--text);
 }
 
 /* Main layout: logo on left, gallery on right */

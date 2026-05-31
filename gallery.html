@@ -8,12 +8,20 @@
   <!-- Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Slackside+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Slackside+One&display=swap" rel="stylesheet">
 
+  <!-- Design tokens (palette, type) -->
+  <link rel="stylesheet" href="./css/tokens.css">
+
+  <!-- Theme toggle: runs early to prevent flash of wrong theme -->
+  <script src="./js/theme-toggle.js"></script>
   <!-- Gallery styles -->
   <link rel="stylesheet" href="./css/style_gallery.css?v=4">
 </head>
 <body>
+
+<button id="theme-toggle" aria-label="Switch to dark mode">Dark</button>
+
   <main class="wrap">
     <!-- Logo + opposing wordmarks -->
     <div class="brand" aria-label="Studio Sol">

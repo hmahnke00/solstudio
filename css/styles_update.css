@@ -1,4 +1,5 @@
 
+/* Note: --pad, --font-brand, --font-body defined in tokens.css */
 :root {
   --pad: clamp(12px, 2vw, 24px);
 }
