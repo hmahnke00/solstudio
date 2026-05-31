@@ -74,13 +74,13 @@ body {
   padding: clamp(8px, 1.5vw, 16px);
 }
 
-/* Isotope column + gutter sizers */
+/* Isotope column + gutter sizers — use % so Isotope can calculate columns */
 .grid-sizer,
 .grid-item {
-  width: calc(33.333% - 6px); /* 3 columns; gap = gutter-sizer width * 2/3 */
+  width: 32%;
 }
 
-.gutter-sizer { width: 8px; }
+.gutter-sizer { width: 2%; }
 
 .grid-item {
   margin-bottom: 8px;
@@ -122,17 +122,17 @@ body {
 @media (max-width: 700px) {
   .grid-sizer,
   .grid-item {
-    width: calc(50% - 4px); /* 2 columns on tablet/large mobile */
+    width: 49%;
   }
-  .gutter-sizer { width: 8px; }
+  .gutter-sizer { width: 2%; }
 }
 
 @media (max-width: 420px) {
   .grid-sizer,
   .grid-item {
-    width: 100%; /* 1 column on small mobile */
+    width: 100%;
   }
-  .gutter-sizer { width: 0px; }
+  .gutter-sizer { width: 0%; }
   .filter-bar { gap: 16px; }
 }
 

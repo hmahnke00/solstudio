@@ -67,14 +67,13 @@
     items.forEach(function (el) { el.classList.add('loaded'); });
 
     iso = new Isotope(grid, {
-      itemSelector:  '.grid-item',
-      layoutMode:    'masonry',
+      itemSelector:    '.grid-item',
+      percentPosition: true,   // required for % column widths to work correctly
+      layoutMode:      'masonry',
       masonry: {
         columnWidth:  '.grid-sizer',
         gutter:       '.gutter-sizer'
-      },
-      // Sort: keep the original gallery.json order
-      originLeft: true
+      }
     });
 
     // Apply ?series= URL param if present
