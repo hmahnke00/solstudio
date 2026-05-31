@@ -71,7 +71,7 @@ body {
    Masonry grid
    ------------------------------------------------------- */
 .gallery-grid {
-  padding: clamp(8px, 1.5vw, 16px);
+  padding: 0;
 }
 
 /* Isotope column sizer — no gutter-sizer, gaps handled by padding on items */

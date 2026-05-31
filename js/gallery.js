@@ -67,9 +67,8 @@
     items.forEach(function (el) { el.classList.add('loaded'); });
 
     iso = new Isotope(grid, {
-      itemSelector:    '.grid-item',
-      percentPosition: true,
-      layoutMode:      'masonry',
+      itemSelector: '.grid-item',
+      layoutMode:   'masonry',
       masonry: {
         columnWidth: '.grid-sizer'
       }
