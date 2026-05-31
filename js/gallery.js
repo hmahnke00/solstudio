@@ -68,11 +68,10 @@
 
     iso = new Isotope(grid, {
       itemSelector:    '.grid-item',
-      percentPosition: true,   // required for % column widths to work correctly
+      percentPosition: true,
       layoutMode:      'masonry',
       masonry: {
-        columnWidth:  '.grid-sizer',
-        gutter:       '.gutter-sizer'
+        columnWidth: '.grid-sizer'
       }
     });
 
