@@ -3,39 +3,87 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Studio Sol</title>
+  <title>Sol Studio</title>
 
-  <!-- Optional: swap for your font; system stack is fine if you skip this -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Slackside+One&display=swap" rel="stylesheet">
-  
-<link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/styles_update.css?v=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Slackside+One&display=swap" rel="stylesheet">
 
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/home.css">
 
+  <!-- Apply saved theme before page renders to prevent flash -->
+  <script src="js/theme-toggle.js"></script>
 </head>
 
 <body>
-  <main class="hero" role="main" aria-label="Landing">
-    <!-- Centered vertical logo + wordmark -->
-    <div class="brand" aria-label="Studio Sol">
-      <!-- Replace with your sun mark; transparent PNG or SVG recommended -->
-      <div class="wordmark left">SOL</div>
-      <img src="Branding/solstudiocutout.png" alt="Studio Sol sun logo" width="300" height="300"/>
-      <div class="wordmark right">STUDIO</div>
-    </div>
 
-    <!-- Bottom navigation -->
-    <nav class="site-nav" aria-label="Primary">
+  <!-- Sticky nav: hidden until hero scrolls out of view (home.js) -->
+  <nav class="sticky-nav" id="sticky-nav" aria-label="Site navigation">
+    <a href="index.html" class="sticky-nav__brand">Sol Studio</a>
+    <ul>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prints.html">Prints</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Panel 1: Hero -->
+  <!-- Swap background-image src to change the hero photo -->
+  <section class="panel panel--hero" id="hero">
+    <div class="brand">
+      <img src="Branding/solstudiocutout.png" alt="Sol Studio sun mark">
+      <span class="brand__wordmark">SOL<br>STUDIO</span>
+    </div>
+    <nav class="hero-nav" aria-label="Primary">
       <ul>
-        <li><a href="./gallery.html">Gallery</a></li>
-        <li><a href="./prints.html">Prints</a></li>
-        <li><a href="./contact.html">Contact</a></li>
-        <li><a href="./about.html">About</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="prints.html">Prints</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="about.html">About</a></li>
       </ul>
     </nav>
-  </main>
+  </section>
+
+  <!-- Panel 2: Contact series -->
+  <!-- Swap src to change the Contact panel photo -->
+  <section class="panel panel--series" style="background-image: url('gallery_photos/california-surfer-swell.jpg')">
+    <div class="panel__content reveal">
+      <h2 class="series-name">Contact</h2>
+      <p class="series-desc">hands in the landscape</p>
+      <a href="gallery.html?series=contact" class="series-link">View series →</a>
+    </div>
+  </section>
+
+  <!-- Panel 3: Small series -->
+  <!-- Swap src to change the Small panel photo -->
+  <section class="panel panel--series" style="background-image: url('gallery_photos/patagonia-hikers-ridge.jpg')">
+    <div class="panel__content reveal">
+      <h2 class="series-name">Small</h2>
+      <p class="series-desc">dwarfed by the world</p>
+      <a href="gallery.html?series=small" class="series-link">View series →</a>
+    </div>
+  </section>
+
+  <!-- Panel 4: Witness series -->
+  <!-- Swap src to change the Witness panel photo -->
+  <section class="panel panel--series" style="background-image: url('gallery_photos/patagonia-glacier.jpg')">
+    <div class="panel__content reveal">
+      <h2 class="series-name">Witness</h2>
+      <p class="series-desc">the world, observed</p>
+      <a href="gallery.html?series=witness" class="series-link">View series →</a>
+    </div>
+  </section>
+
+  <!-- Panel 5: About teaser -->
+  <section class="panel panel--about">
+    <div class="about-teaser reveal">
+      <p class="about-concept">the inherent connection<br>between people and landscapes</p>
+      <a href="about.html" class="about-link">About Sol Studio →</a>
+    </div>
+  </section>
+
+  <script src="js/home.js"></script>
 </body>
 </html>
-

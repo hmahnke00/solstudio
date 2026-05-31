@@ -1,0 +1,336 @@
+/* ============================================================
+   Sol Studio — Homepage styles
+   Five full-bleed panels stacked vertically.
+   ============================================================ */
+
+/* --- Reset & base ----------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  margin: 0;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #000; /* shown for an instant while hero image loads */
+}
+
+/* --- Panel base -------------------------------------------- */
+.panel {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* --- Photo panels (hero + series) -------------------------- */
+.panel--hero,
+.panel--series {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #fff;
+}
+
+/* Gradient overlay: darkens the bottom third for text legibility */
+.panel--hero::after,
+.panel--series::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.60) 0%,
+    rgba(0, 0, 0, 0.20) 45%,
+    rgba(0, 0, 0, 0.00) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------
+   Panel 1: Hero
+   ------------------------------------------------------- */
+.panel--hero {
+  background-image: url('../Branding/pavones_background.png');
+  /* To change the hero photo, update the url() above */
+}
+
+/* Brand mark: upper-left corner */
+.brand {
+  position: absolute;
+  top: clamp(20px, 3vh, 40px);
+  left: clamp(24px, 3vw, 48px);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+  text-decoration: none;
+}
+
+.brand img {
+  width: clamp(32px, 3.5vw, 48px);
+  height: auto;
+  opacity: 0.85;
+  display: block;
+}
+
+.brand__wordmark {
+  font-family: var(--font-brand);
+  font-size: clamp(12px, 1.3vw, 17px);
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+  opacity: 0.9;
+}
+
+/* Hero nav: bottom center */
+.hero-nav {
+  position: absolute;
+  bottom: clamp(20px, 3.5vh, 40px);
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.hero-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: clamp(28px, 7vw, 80px);
+  flex-wrap: wrap;
+}
+
+.hero-nav a {
+  font-family: var(--font-brand);
+  font-size: clamp(15px, 1.8vw, 22px);
+  letter-spacing: 0.06em;
+  color: #fff;
+  text-decoration: none;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+/* Underline hover effect */
+.hero-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  bottom: -5px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 200ms ease;
+  opacity: 0.85;
+}
+.hero-nav a:hover::after,
+.hero-nav a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* -------------------------------------------------------
+   Panels 2–4: Series
+   ------------------------------------------------------- */
+
+/* Content block: bottom-left of each panel */
+.panel__content {
+  position: absolute;
+  bottom: clamp(48px, 9vh, 100px);
+  left: clamp(32px, 5vw, 72px);
+  z-index: 2;
+}
+
+/* Series name: large Slackside One */
+.series-name {
+  font-family: var(--font-brand);
+  font-size: clamp(52px, 9vw, 112px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  margin: 0 0 14px;
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Descriptor: Inter Light italic */
+.series-desc {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(14px, 1.4vw, 18px);
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 22px;
+}
+
+/* "View series →" link */
+.series-link {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  padding-bottom: 3px;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+.series-link:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+/* -------------------------------------------------------
+   Panel 5: About teaser
+   ------------------------------------------------------- */
+.panel--about {
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-teaser {
+  text-align: center;
+  padding: 0 clamp(24px, 8vw, 100px);
+  max-width: 680px;
+}
+
+.about-concept {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: clamp(20px, 2.8vw, 32px);
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--text);
+  margin: 0 0 36px;
+}
+
+.about-link {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 3px;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+.about-link:hover {
+  color: var(--text);
+  border-color: var(--text);
+}
+
+/* -------------------------------------------------------
+   Sticky nav
+   ------------------------------------------------------- */
+.sticky-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(24px, 4vw, 56px);
+  height: 52px;
+
+  /* Glass-style backdrop — readable over both photos and light panel */
+  background: rgba(14, 14, 12, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  /* Hidden until hero scrolls out */
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 280ms ease, transform 280ms ease;
+  pointer-events: none;
+}
+
+.sticky-nav.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.sticky-nav__brand {
+  font-family: var(--font-brand);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  transition: color 150ms;
+}
+.sticky-nav__brand:hover { color: #fff; }
+
+.sticky-nav ul {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  gap: clamp(20px, 3vw, 40px);
+}
+
+.sticky-nav a {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+.sticky-nav a:hover { color: rgba(255, 255, 255, 0.95); }
+
+/* -------------------------------------------------------
+   Scroll reveal
+   ------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* -------------------------------------------------------
+   Accessibility: reduced motion
+   ------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal,
+  .sticky-nav { transition: none; }
+  .hero-nav a::after { transition: none; }
+}
+
+/* -------------------------------------------------------
+   Mobile
+   ------------------------------------------------------- */
+@media (max-width: 600px) {
+  .series-name {
+    font-size: clamp(44px, 14vw, 72px);
+  }
+  .panel__content {
+    bottom: clamp(36px, 7vh, 64px);
+    left: clamp(20px, 5vw, 40px);
+  }
+  .hero-nav ul {
+    gap: clamp(20px, 8vw, 48px);
+  }
+  .sticky-nav ul {
+    gap: 16px;
+  }
+}
