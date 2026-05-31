@@ -1,165 +1,145 @@
-/* ===========================
-   Studio Sol – Gallery Styles
-   =========================== */
+/* ============================================================
+   Sol Studio — Gallery styles
+   Masonry grid with series filter bar.
+   ============================================================ */
 
-/* Base + reset-ish */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
-html,
-body {
-  height: 100%;
+html, body {
   margin: 0;
   padding: 0;
 }
 
 body {
-  font-family: var(--font-brand);
+  font-family: var(--font-body);
   background: var(--bg);
   color: var(--text);
 }
 
-/* Main layout: logo on left, gallery on right */
-
-.wrap {
-  height: 100vh;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: stretch;                 /* 🔑 both columns full height */
-  column-gap: clamp(32px, 5vw, 72px);
-  padding: var(--wrap-pad-y) 32px;      /* symmetric top/bottom padding */
-}
-
-/* Logo block */
-.brand {
+/* -------------------------------------------------------
+   Header
+   ------------------------------------------------------- */
+.gallery-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
-  align-items: center;      /* center logo vertically */
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(14px, 2vh, 24px) clamp(20px, 3vw, 48px);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
 }
-.brand img {
-  width: clamp(200px, 24vh, 340px);   /* was 260px–420px */
+
+.gallery-logo img {
+  width: clamp(28px, 3vw, 40px);
   height: auto;
-  opacity: 0.9;
-}
-
-
-/* Horizontal scrolling gallery strip */
-
-/* GLOBAL TILE HEIGHT (controls everything) */
-:root {
-  --wrap-pad-y: 0px;   /* equal top & bottom padding */
-  --row-gap: 5px;      /* vertical gap between rows */
-  --grid-offset: -8px;
-  /* Two rows + one gap + top & bottom padding = 100vh */
-  --tile-h: calc(
-    (100vh - (var(--wrap-pad-y) * 2) - var(--row-gap)) / 2
-  );
-}
-
-/* MAIN GALLERY GRID: 2 rows, width & height based on vh */
-
-.grid {
-  width: 100%;
-  height: 100%;                         /* fill the column height */
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-rows: repeat(2, var(--tile-h));
-  grid-auto-columns: calc(var(--tile-h) * 1.5);
-  row-gap: var(--row-gap);
-  column-gap: 5px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 0;                           /* no extra vertical padding */
-  scrollbar-width: none;
-  transform: translateY(var(--grid-offset));
-}
-
-.grid::-webkit-scrollbar {
-  display: none;
-}
-
-/* Each image “panel” */
-
-.item {
-  width: 100%;
-  height: 100%;
-  border-radius: 0 px;
-  overflow: hidden;
-  background: #111;
-}
-
-.item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
   display: block;
-  transition: transform 0.35s ease;
+  opacity: 0.8;
+  transition: opacity 150ms;
+}
+.gallery-logo:hover img { opacity: 1; }
+
+/* -------------------------------------------------------
+   Filter bar
+   ------------------------------------------------------- */
+.filter-bar {
+  display: flex;
+  gap: clamp(20px, 3.5vw, 48px);
 }
 
-.item:hover img {
-  transform: scale(1.04);
+.filter-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  transition: color 150ms ease;
 }
 
+.filter-btn:hover,
+.filter-btn.is-active {
+  color: var(--text);
+}
 
-/* === MOBILE LAYOUT === */
+/* -------------------------------------------------------
+   Masonry grid
+   ------------------------------------------------------- */
+.gallery-grid {
+  padding: clamp(8px, 1.5vw, 16px);
+}
 
-@media (max-width: 600px) {
+/* Isotope column + gutter sizers */
+.grid-sizer,
+.grid-item {
+  width: calc(33.333% - 6px); /* 3 columns; gap = gutter-sizer width * 2/3 */
+}
 
-  /* Whole page: simple vertical stack, centered */
-  .wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;     /* center children horizontally */
-    justify-content: flex-start;
-    width: 100%;
-    padding: 24px 0 32px;   /* top / bottom white space */
-    gap: 16px;              /* space between logo and first photo */
-    height: auto;           /* override desktop 100vh */
+.gutter-sizer { width: 8px; }
+
+.grid-item {
+  margin-bottom: 8px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.grid-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 250ms ease, transform 350ms ease;
+}
+
+.grid-item:hover img {
+  opacity: 0.88;
+  transform: scale(1.02);
+}
+
+/* Fade in as items load */
+.grid-item {
+  opacity: 0;
+  transition: opacity 400ms ease, transform 350ms ease;
+}
+.grid-item.loaded {
+  opacity: 1;
+}
+
+/* -------------------------------------------------------
+   Theme toggle (fixed top-right)
+   ------------------------------------------------------- */
+#theme-toggle {
+  top: clamp(14px, 2vh, 24px); /* align with header */
+}
+
+/* -------------------------------------------------------
+   Mobile
+   ------------------------------------------------------- */
+@media (max-width: 700px) {
+  .grid-sizer,
+  .grid-item {
+    width: calc(50% - 4px); /* 2 columns on tablet/large mobile */
   }
+  .gutter-sizer { width: 8px; }
+}
 
-  /* Logo centered at the top */
-  .brand {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+@media (max-width: 420px) {
+  .grid-sizer,
+  .grid-item {
+    width: 100%; /* 1 column on small mobile */
   }
+  .gutter-sizer { width: 0px; }
+  .filter-bar { gap: 16px; }
+}
 
-  .brand img {
-    width: 120px;
-    height: auto;
-  }
-
-  /* Gallery: full-width vertical feed */
-  .grid {
-    display: flex !important;     /* override desktop grid */
-    flex-direction: column;
-    align-items: center;          /* center items horizontally */
-    width: 100%;
-    gap: 4px;
-    padding: 0;
-    margin: 0;
-    overflow: visible;
-    height: auto;
-    transform: none !important;   /* remove desktop translateY */
-  }
-
-  /* Each photo card */
-  .item {
-    width: 100%;                  /* as wide as the screen */
-    max-width: 99%;
-    aspect-ratio: 3 / 2;
-    border-radius: 0;
-    overflow: hidden;
-    margin: 0;   
-  }
-
-  .item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
+/* -------------------------------------------------------
+   Reduced motion
+   ------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .grid-item,
+  .grid-item img { transition: none; }
 }

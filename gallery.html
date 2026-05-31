@@ -3,47 +3,45 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gallery · Studio Sol</title>
+  <title>Gallery · Sol Studio</title>
 
-  <!-- Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Slackside+One&display=swap" rel="stylesheet">
 
-  <!-- Design tokens (palette, type) -->
   <link rel="stylesheet" href="./css/tokens.css">
+  <link rel="stylesheet" href="./css/style_gallery.css">
 
-  <!-- Theme toggle: runs early to prevent flash of wrong theme -->
+  <!-- Apply saved theme before page renders -->
   <script src="./js/theme-toggle.js"></script>
-  <!-- Gallery styles -->
-  <link rel="stylesheet" href="./css/style_gallery.css?v=4">
 </head>
 <body>
 
-<button id="theme-toggle" aria-label="Switch to dark mode">Dark</button>
+  <button id="theme-toggle" aria-label="Switch to dark mode">Dark</button>
 
-  <main class="wrap">
-    <!-- Logo + opposing wordmarks -->
-    <div class="brand" aria-label="Studio Sol">
-      
-      <img src="Branding/solstudiocutout.png" alt="Studio Sol sun logo" />
-      
-    </div>
+  <!-- Header: logo left, filters right -->
+  <header class="gallery-header">
+    <a href="index.html" class="gallery-logo" aria-label="Sol Studio home">
+      <img src="Branding/solstudiocutout.png" alt="Sol Studio">
+    </a>
+    <nav class="filter-bar" id="filter-bar" aria-label="Filter by series">
+      <button class="filter-btn is-active" data-filter="*">All</button>
+      <button class="filter-btn" data-filter=".contact">Contact</button>
+      <button class="filter-btn" data-filter=".small">Small</button>
+      <button class="filter-btn" data-filter=".witness">Witness</button>
+    </nav>
+  </header>
 
-    <!-- The grid -->
-    <section class="grid">
-      <!-- Duplicate <figure> lines for each photo -->
-      <figure class="item"><img src="Photos/DSC_0028.png" alt="Shoreline dawn" loading="lazy" decoding="async"></figure>
-      <figure class="item"><img src="Photos/DSC_0477-1.jpg"   alt="…"            loading="lazy" decoding="async"></figure>
-      <figure class="item"><img src="Photos/DSC_0488-2.jpg"   alt="…"            loading="lazy" decoding="async"></figure>
-      <figure class="item"><img src="Photos/DSC_0876.jpg"   alt="…"            loading="lazy" decoding="async"></figure>
-      <figure class="item"><img src="Photos/DSC_0745.jpg"   alt="…"            loading="lazy" decoding="async"></figure>
-      <figure class="item"><img src="Photos/DSC_0424.jpg"   alt="…"            loading="lazy" decoding="async"></figure>
-      <figure class="item"><img src="Photos/DSC_0228.jpg"   alt="…"            loading="lazy" decoding="async"></figure>
-      <figure class="item"><img src="Photos/DSC_0110-2.jpg"   alt="…"            loading="lazy" decoding="async"></figure>
-      
-      <!-- add as many as you like -->
-    </section>
+  <!-- Gallery grid — populated by gallery.js -->
+  <main class="gallery-grid" id="gallery-grid">
+    <!-- column width sizers for Isotope masonry -->
+    <div class="grid-sizer"></div>
+    <div class="gutter-sizer"></div>
   </main>
+
+  <!-- Isotope + imagesLoaded (no jQuery needed) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/5.0.0/imagesloaded.pkgd.min.js"></script>
+  <script src="./js/gallery.js"></script>
 </body>
 </html>
