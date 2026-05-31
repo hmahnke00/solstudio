@@ -1,6 +1,6 @@
 /* ============================================================
    Sol Studio — Gallery styles
-   Masonry grid with series filter bar.
+   CSS column masonry + JS filter bar.
    ============================================================ */
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -68,21 +68,21 @@ body {
 }
 
 /* -------------------------------------------------------
-   Masonry grid
+   Masonry grid — CSS columns
    ------------------------------------------------------- */
 .gallery-grid {
-  padding: 0;
+  column-count: 3;
+  column-gap: 6px;
+  padding: 6px;
 }
 
-/* Isotope column sizer — no gutter-sizer, gaps handled by padding on items */
-.grid-sizer,
+/* Each item sits inside a column, no breaking across columns */
 .grid-item {
-  width: 33.333%;
-}
-
-.grid-item {
-  padding: 4px;
+  break-inside: avoid;
+  margin-bottom: 6px;
   cursor: pointer;
+  overflow: hidden;
+  transition: opacity 300ms ease;
 }
 
 .grid-item img {
@@ -97,33 +97,27 @@ body {
   transform: scale(1.02);
 }
 
-/* Fade in as items load */
-.grid-item {
-  opacity: 0;
-  transition: opacity 400ms ease, transform 350ms ease;
-}
-.grid-item.loaded {
-  opacity: 1;
+/* Hidden state for filtered-out items */
+.grid-item.hidden {
+  display: none;
 }
 
 /* -------------------------------------------------------
    Theme toggle (fixed top-right)
    ------------------------------------------------------- */
 #theme-toggle {
-  top: clamp(14px, 2vh, 24px); /* align with header */
+  top: clamp(14px, 2vh, 24px);
 }
 
 /* -------------------------------------------------------
    Mobile
    ------------------------------------------------------- */
 @media (max-width: 700px) {
-  .grid-sizer,
-  .grid-item { width: 50%; }
+  .gallery-grid { column-count: 2; }
 }
 
 @media (max-width: 420px) {
-  .grid-sizer,
-  .grid-item { width: 100%; }
+  .gallery-grid { column-count: 1; }
   .filter-bar { gap: 16px; }
 }
 
