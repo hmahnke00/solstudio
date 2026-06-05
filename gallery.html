@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Slackside+One&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="./css/tokens.css">
-  <link rel="stylesheet" href="./css/style_gallery.css?v=8">
+  <link rel="stylesheet" href="./css/style_gallery.css?v=9">
 
   <!-- Apply saved theme before page renders -->
   <script src="./js/theme-toggle.js"></script>
@@ -19,25 +19,25 @@
 
   <button id="theme-toggle" aria-label="Switch to dark mode">Dark</button>
 
-  <!-- Header: logo left, filters right -->
   <header class="gallery-header">
     <a href="index.html" class="gallery-logo" aria-label="Sol Studio home">
       <img src="Branding/solstudiocutout.png" alt="Sol Studio">
     </a>
-    <nav class="filter-bar" id="filter-bar" aria-label="Filter by series">
-      <button class="filter-btn is-active" data-filter="*">All</button>
-      <button class="filter-btn" data-filter=".contact">Contact</button>
-      <button class="filter-btn" data-filter=".small">Small</button>
-      <button class="filter-btn" data-filter=".witness">Witness</button>
-    </nav>
   </header>
 
-  <!-- Gallery grid — populated by gallery.js -->
-  <main class="gallery-grid" id="gallery-grid">
-    <!-- column width sizer for Isotope masonry -->
-    <div class="grid-sizer"></div>
-  </main>
+  <section class="gallery-section">
+    <main class="gallery-grid" id="gallery-grid"></main>
+  </section>
 
-  <script src="./js/gallery.js?v=4"></script>
+  <!-- Lightbox overlay -->
+  <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" hidden>
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close">×</button>
+    <button class="lightbox-prev" id="lightbox-prev" aria-label="Previous photo">‹</button>
+    <button class="lightbox-next" id="lightbox-next" aria-label="Next photo">›</button>
+    <img class="lightbox-img" id="lightbox-img" alt="">
+  </div>
+
+  <script src="./js/gallery-data.js"></script>
+  <script src="./js/gallery.js?v=6"></script>
 </body>
 </html>

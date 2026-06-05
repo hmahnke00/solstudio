@@ -1,38 +1,40 @@
 /* ============================================================
    Sol Studio — Gallery
-   1. Fetches gallery.json and builds the grid
-   2. Simple show/hide filtering with fade transition
-   3. Reads ?series= URL param to auto-filter on load
+   Horizontal 3-row grid + lightbox.
    ============================================================ */
 
 (function () {
 
-  var grid      = document.getElementById('gallery-grid');
-  var filterBar = document.getElementById('filter-bar');
+  var grid        = document.getElementById('gallery-grid');
+  var section     = document.querySelector('.gallery-section');
+  var header      = document.querySelector('.gallery-header');
+  var lightbox    = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightbox-img');
+
+  var photos       = [];
+  var currentIndex = 0;
 
   /* ----------------------------------------------------------
-     1. Fetch gallery.json and build the grid
+     1. Load gallery data (inlined via gallery-data.js to support
+        file:// protocol — fetch() is blocked on local files)
      ---------------------------------------------------------- */
-  fetch('./gallery.json')
-    .then(function (res) { return res.json(); })
-    .then(function (photos) {
-      buildGrid(photos);
-      applyUrlFilter();
-    })
-    .catch(function (err) {
-      console.error('Could not load gallery.json:', err);
-    });
+  if (typeof GALLERY_DATA !== 'undefined' && GALLERY_DATA.length) {
+    photos = GALLERY_DATA;
+    buildGrid(photos);
+    setColumnWidth();
+  } else {
+    console.error('gallery-data.js not loaded or empty.');
+  }
 
   /* ----------------------------------------------------------
-     2. Build grid items from photo data
+     2. Build grid items
      ---------------------------------------------------------- */
-  function buildGrid(photos) {
+  function buildGrid(data) {
     var fragment = document.createDocumentFragment();
 
-    photos.forEach(function (photo) {
+    data.forEach(function (photo, index) {
       var fig = document.createElement('figure');
-      fig.className = 'grid-item ' + photo.series;
-      fig.setAttribute('data-series', photo.series);
+      fig.className = 'grid-item';
 
       var img = document.createElement('img');
       img.src      = 'gallery_photos/' + photo.filename;
@@ -41,6 +43,7 @@
       img.decoding = 'async';
 
       fig.appendChild(img);
+      fig.addEventListener('click', function () { openLightbox(index); });
       fragment.appendChild(fig);
     });
 
@@ -48,41 +51,73 @@
   }
 
   /* ----------------------------------------------------------
-     3. Filter bar — show/hide with CSS transition
+     3. Set grid height + column width so cells are 4:3 rectangles.
+        Recalculates on resize.
      ---------------------------------------------------------- */
-  if (filterBar) {
-    filterBar.addEventListener('click', function (e) {
-      var btn = e.target.closest('.filter-btn');
-      if (!btn) return;
-
-      // Update active state
-      filterBar.querySelectorAll('.filter-btn').forEach(function (b) {
-        b.classList.remove('is-active');
-      });
-      btn.classList.add('is-active');
-
-      var filter = btn.getAttribute('data-filter'); // "*" or ".contact" etc.
-
-      grid.querySelectorAll('.grid-item').forEach(function (item) {
-        var show = filter === '*' || item.classList.contains(filter.slice(1));
-        item.classList.toggle('hidden', !show);
-      });
-    });
+  function setColumnWidth() {
+    var headerH  = header.offsetHeight;
+    var sectionH = window.innerHeight - headerH;
+    if (sectionH <= 0) {
+      requestAnimationFrame(setColumnWidth);
+      return;
+    }
+    var gap  = 2;
+    var pad  = 2;
+    var rows = 3;
+    var rowH = (sectionH - 2 * pad - (rows - 1) * gap) / rows;
+    var colW = Math.floor((rowH * 16) / 9);
+    grid.style.height          = sectionH + 'px';
+    grid.style.gridAutoColumns = colW + 'px';
   }
+
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(setColumnWidth, 100);
+  });
 
   /* ----------------------------------------------------------
-     4. URL param: ?series=contact
+     4. Lightbox
      ---------------------------------------------------------- */
-  function applyUrlFilter() {
-    var params = new URLSearchParams(window.location.search);
-    var series = params.get('series');
-    if (!series) return;
-
-    var btn = filterBar
-      ? filterBar.querySelector('[data-filter=".' + series + '"]')
-      : null;
-
-    if (btn) btn.click();
+  function openLightbox(index) {
+    currentIndex = index;
+    refreshLightbox();
+    lightbox.hidden = false;
   }
+
+  function closeLightbox() {
+    lightbox.hidden = true;
+  }
+
+  function refreshLightbox() {
+    var photo = photos[currentIndex];
+    lightboxImg.src = 'gallery_photos/' + photo.filename;
+    lightboxImg.alt = photo.alt || photo.title;
+  }
+
+  function showPrev() {
+    currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+    refreshLightbox();
+  }
+
+  function showNext() {
+    currentIndex = (currentIndex + 1) % photos.length;
+    refreshLightbox();
+  }
+
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+  document.getElementById('lightbox-prev').addEventListener('click', showPrev);
+  document.getElementById('lightbox-next').addEventListener('click', showNext);
+
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (lightbox.hidden) return;
+    if (e.key === 'Escape')     closeLightbox();
+    if (e.key === 'ArrowLeft')  showPrev();
+    if (e.key === 'ArrowRight') showNext();
+  });
 
 })();
