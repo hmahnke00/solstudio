@@ -9,11 +9,14 @@
    ---------------------------------------------------------- */
 :root {
   /* Palette */
-  --bg:             #F4F1EC;  /* warm off-white */
+  --bg:             #FFFFFF;  /* pure white */
   --text:           #1C1C1A;  /* near-black */
   --text-secondary: rgba(28, 28, 26, 0.55);  /* captions, labels */
-  --surface:        #EDEAE4;  /* slightly darker than bg — card surfaces */
+  --surface:        #F2F2F2;  /* light card surfaces */
   --border:         rgba(28, 28, 26, 0.12);
+
+  /* Navigation */
+  --nav-height:     56px;
 
   /* Typography */
   --font-brand: 'Slackside One', cursive;

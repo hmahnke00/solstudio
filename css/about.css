@@ -1,382 +1,186 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Slackside+One&display=swap');
-html, body{
-  height: 100%;
-  overflow: hidden;
+
+/* ============================================================
+   Sol Studio — About page
+   Two-column layout: photo left, logo + text right.
+   No absolute-position nudge hacks.
+   Mobile (≤ 768px): single-column stacked.
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-body{
+html, body {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
+  padding: 0;
+  background: var(--bg, #FFFFFF);
+  color: var(--text, #1C1C1A);
 }
 
-/* Full-screen stage that centers the artboard */
-.stage{
-  width: 100vw;
-  height: 100vh;
+/* ── Page wrapper ─────────────────────────────────────────── */
+.about-page {
+  min-height: 100vh;
+  background: var(--bg, #FFFFFF);
+}
+
+/* ── Main content area (below sticky nav) ─────────────────── */
+.about-hero {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px clamp(20px, 4vw, 56px) 80px;
+  overflow: hidden; /* contain watermark */
+
   display: grid;
-  place-items: center;
-  overflow: hidden;
-  background: #fff;
+  grid-template-columns: 55fr 45fr;
+  column-gap: clamp(32px, 5vw, 80px);
+  align-items: start;
 }
 
-/* Fixed artboard (Figma frame) scaled to fit */
-.artboard{
-  width: 1512px;
-  height: 982px;
-  transform-origin: center;
-  transform: scale(var(--ui-scale, 1));
+/* ── Background watermark (decorative, non-layout) ─────────── */
+.about-bg-sun {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(1100px, 90vw);
+  height: auto;
+  opacity: 0.04;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
 }
 
+/* ── Left column: photo + vertical label ─────────────────── */
+.about-left {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
 
+.about-image-wrap {
+  flex: 1;
+  min-width: 0;
+}
 
-   *,
-   *::before,
-   *::after {
-     box-sizing: border-box;
-   }
-   
-   /* -------------------------------------------------------
-      Alignment knobs (desktop)
-      ------------------------------------------------------- */
-   :root{
-     /* page padding */
-     --about-pad: 16px;
-   
-     /* layout proportions: image column vs text column */
-     --about-col-left: 700px;
-     --about-col-right: 520px;
-   
-     /* spacing between columns + rows */
-     --about-col-gap: 80px;
-     --about-row-gap: 48px;
+.about-image {
+  width: 100%;
+  height: auto;
+  max-height: 560px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
 
-     /* artboard-locked (no vw/clamp) */
-     --about-top-gap: 28px;
-     --about-watermark-width: 1100px;
-     --about-vertical-font-size: 30px;
-     --about-logo-size: 230px;
-   
-     /* image “framing” nudges (small only) */
-     --about-image-nudge-x: 0px;   /* + right, - left */
-     --about-image-nudge-y: 0px;  /* + down,  - up  */
+/* Vertical label — decorative accent, right of photo */
+.about-vertical-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  padding-top: 8px;
+}
 
-     /* picture container nudges (moves the whole hero image block) */
-     --about-picture-shift-x: 60px;  /* right (+) / left (-) */
-     --about-picture-shift-y: -30px;  /* down (+) / up (-) */
+.about-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-family: var(--font-brand, 'Slackside One', cursive);
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text, #1C1C1A);
+  opacity: 0.5;
+  white-space: nowrap;
+}
 
-     /* image size (desktop) */
-     --about-image-max-height: 500px; /* controls image height/crop */
+/* ── Right column: logo + text ───────────────────────────── */
+.about-right {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  padding-top: 24px;
+}
 
-     /* text block nudges (desktop) */
-     --about-text-nudge-x: -100px; /* left is negative */
-     --about-text-nudge-y: 0px;                     /* up is negative */
-   
-     /* vertical label nudges */
-     --about-vertical-nudge-x: 10px;
-     --about-vertical-nudge-y: -0px;
-   
-     /* typography — reference global tokens */
-     --about-font: var(--font-brand);
-     --body-font: var(--font-body);
-     --about-text-max: 70ch;
-     --about-line: 1.7;
-   
-     /* watermark */
-     --about-watermark-opacity: 0.04;
-   }
-   
-   /* Wrapper -------------------------------------------------------------- */
-   .about-hero{
-     position: relative;
-     max-width: 1400px;
-     margin: 0 auto;
-     padding: var(--about-pad);
-     overflow: hidden;
-   
-     font-family: var(--about-font);
-   
-     display: grid;
-     grid-template-columns: var(--about-col-left) var(--about-col-right);
-     grid-template-rows: auto 1fr;
-     column-gap: var(--about-col-gap);
-     row-gap: var(--about-row-gap);
-     align-items: start;
-   }
-   
-   /* Background watermark ------------------------------------------------- */
-   .about-bg-sun{
-     position: absolute;
-     left: 50%;
-     top: 50%;
-     transform: translate(-50%, -50%);
-     width: var(--about-watermark-width);
-     height: auto;
-     opacity: var(--about-watermark-opacity);
-     z-index: 1;
-     pointer-events: none;
-   }
-   
-   /* Top row: photo + vertical text -------------------------------------- */
-   .about-top{
-     grid-column: 1 / 2;
-     grid-row: 1 / 2;
-   
-     display: grid;
-     grid-template-columns: 1fr auto; /* image + vertical label */
-     gap: var(--about-top-gap);
-     align-items: center;
-   
-     position: relative;
-     
-     z-index: 2;
-   }
-   
-   /* Make <picture> behave predictably */
-   .about-top picture{
-     display: block;
-     width: 100%;
+/* Logo — in document flow, not absolutely positioned */
+.about-logo {
+  width: clamp(80px, 10vw, 140px);
+  height: auto;
+  display: block;
+  opacity: 0.85;
+}
 
-     /* Option B: move the container, not the <img> */
-     position: relative;
-     left: var(--about-picture-shift-x);
-     top: var(--about-picture-shift-y);
-   }
-   
-   .about-image{
-    width: 100%;
-    height: auto;
-    max-height: var(--about-image-max-height);
-  
-    /* show the entire image, no cropping */
+/* Text block */
+.about-text p {
+  margin: 0 0 1.4rem;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+  color: var(--text, #1C1C1A);
+  max-width: 58ch;
+}
+
+.about-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Mobile (≤ 768px): single-column stack ───────────────── */
+@media (max-width: 768px) {
+  .about-hero {
+    grid-template-columns: 1fr;
+    padding: 32px 16px 56px;
+    gap: 0;
+    row-gap: 28px;
+  }
+
+  .about-left {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .about-image {
+    max-height: none;
     object-fit: contain;
-    object-position: center center;
-  
-    display: block;
-    transform: none; /* prevent clipping */
-  }
-   
-   /* Vertical column on the right */
-   .about-vertical-wrapper{
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     padding: 0;
-   
-     transform: translate(var(--about-vertical-nudge-x), var(--about-vertical-nudge-y));
-     position: relative;
-   }
-   
-   /* (Optional decorative line behind vertical text) */
-   .about-vertical-wrapper::before{
-     content: "";
-     position: absolute;
-     left: 50%;
-     top: 50%;
-     transform: translate(-50%, -50%);
-     height: clamp(140px, 18vh, 240px);
-     border-left: 1px solid #222;
-     opacity: 0.75;
-   }
-   
-   .about-vertical{
-     writing-mode: vertical-rl;
-     text-orientation: mixed;
-     letter-spacing: 0.02em;
-     line-height: 1.35;
-     font-size: var(--about-vertical-font-size);
-     text-transform: uppercase;
-   
-     position: relative;
-     top: 20px;          /* up = negative, down = positive */
-     left: 5px; 
-     z-index: 1;
-     padding: 0 2px;
-     background: rgba(255, 255, 255, 0);
-   }
-   
-   /* Center logo ---------------------------------------------------------- */
-   .about-center-logo{
-     position: absolute;
-     left: 50%;
-     top: 50%;
-     transform: translate(-50%, -50%);
-     z-index: 3;
-     pointer-events: none;
-   }
-   
-   .about-center-logo img{
-     width: var(--about-logo-size);
-     height: auto;
-     display: block;
-   }
-   
-   /* Text block ----------------------------------------------------------- */
-   .about-intro-block{
-     grid-column: 2 / 3;
-     grid-row: 2 / 3;
-   
-     position: relative;
-     top: var(--about-text-nudge-y);   /* up = negative, down = positive */
-     left: var(--about-text-nudge-x);  /* left = negative, right = positive */
-     z-index: 2;
-     margin: 0;
-     width: 100%;
-     max-width: var(--about-text-max);
-   
-     /* IMPORTANT: alignment is done with grid + spacing, not translate */
-     align-self: start;
-   
-     /* if you want the text a touch lower/higher, use margin-top */
-      margin-top: 0px;
-      margin-left: 0px; 
-   }
-   
-   /* (Optional crosshair lines — currently off below) */
-   .about-lines::before,
-   .about-lines::after{
-     content: "";
-     position: absolute;
-     left: 18px;
-     border-color: #222;
-     border-style: solid;
-   }
-   
-   .about-lines::before{
-     top: 8px;
-     height: 120px;
-     border-left-width: 1px;
-   }
-   
-   .about-lines::after{
-     top: 8px;
-     width: 40px;
-     border-top-width: 1px;
-   }
-   
-   /* Paragraph styling */
-   .about-text p{
-     margin: 0 0 1.25rem;
-     line-height: var(--about-line);
-     font-size: 17px;
-     font-family: var(--body-font);
-     font-weight: 300;
-     letter-spacing: 0.01em;
-     max-width: 62ch; /* nice line length on desktop */
-   }
-   
-   /* TEMP: remove all decorative text lines (matches your current intent) */
-   .about-vertical-wrapper::before,
-   .about-lines::before,
-   .about-lines::after{
-     display: none;
-   }
-   
-   /* =========================================================
-      Mobile-only overrides
-      ========================================================= */
-   @media (max-width: 0px){
-   
-     /* reset visual nudges so mobile is predictable */
-     :root{
-       --about-image-nudge-x: 0px;
-       --about-image-nudge-y: 0px;
-       --about-vertical-nudge-x: 0px;
-       --about-vertical-nudge-y: 0px;
-       --about-watermark-opacity: 0.05;
-       --about-picture-shift-x: 0px;
-       --about-picture-shift-y: 0px;
-     }
-   
-     .about-hero{
-       grid-template-columns: 1fr;
-       grid-template-rows: auto auto;
-       column-gap: 0;
-       row-gap: clamp(18px, 4vw, 36px);
-       overflow-x: hidden;
-     }
-   
-     .about-top{
-       grid-column: 1 / -1;
-       grid-row: 1 / 2;
-   
-       grid-template-columns: 1fr;
-       grid-template-rows: auto auto;
-       align-items: start;
-     }
-   
-     /* prevent mobile image cropping */
-     .about-top picture img,
-     .about-image{
-       width: 100% !important;
-       height: auto !important;
-       max-height: none !important;
-       object-fit: contain !important;
-       display: block;
-       transform: none;
-     }
-   
-     /* Center logo stays centered on screen (your current behavior) */
-     .about-center-logo{
-       position: fixed;
-       left: 50%;
-       top: 50%;
-       transform: translate(-50%, -50%);
-       z-index: 3;
-       pointer-events: none;
-     }
-   
-     /* wordmark reads normally on mobile */
-     .about-vertical{
-       writing-mode: horizontal-tb !important;
-     }
-   
-     /* watermark sits softly in the background on mobile */
-     .about-bg-sun{
-       position: fixed;
-       left: 50%;
-       top: 50%;
-       transform: translate(-50%, -50%);
-       width: 160vw;
-       opacity: var(--about-watermark-opacity);
-       z-index: 1;
-       pointer-events: none;
-     }
-   
-     /* text becomes full width on mobile */
-     .about-intro-block{
-       grid-column: 1 / -1;
-       grid-row: 2 / 3;
-       max-width: none;
-     }
-   
-     .about-text p{
-       max-width: none;
-     }
-   }
-
-/* ===== Desktop composition stabilization ===== */
-@media (min-width: 99999px){
-  :root{
-    /* Freeze the biggest "breathing" factors so desktop layouts match */
-    --about-pad: 56px;
-    --about-col-gap: 80px;
-    --about-row-gap: 48px;
-
-    /* Lock the column widths so the split doesn’t slide around */
-    --about-col-left: 860px;
-    --about-col-right: 520px;
-
-    /* Lock text nudges on desktop so they don’t scale with vw */
-    --about-text-nudge-x: -130px;
-    --about-text-nudge-y: -12px;
-
-    /* Lock the internal gap between image and vertical label */
-    --about-top-gap: 28px;
   }
 
-  /* Stop the watermark from scaling with viewport width */
-  .about-bg-sun{
-    width: 1100px;
+  /* Stack vertical label horizontally on mobile */
+  .about-vertical-wrapper {
+    width: auto;
+    padding-top: 0;
+    align-self: center;
+  }
+
+  .about-vertical {
+    writing-mode: horizontal-tb;
+    font-size: 14px;
+    opacity: 0.45;
+    letter-spacing: 0.12em;
+  }
+
+  .about-right {
+    padding-top: 0;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .about-logo {
+    width: clamp(64px, 18vw, 100px);
+  }
+
+  .about-text p {
+    font-size: 16px;
+    max-width: none;
+    text-align: left;
   }
 }

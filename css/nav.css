@@ -1,0 +1,127 @@
+/* ============================================================
+   Sol Studio — Global Navigation
+   Sticky top bar: logo left, links right.
+   Used on every page. Active link set via aria-current="page".
+   ============================================================ */
+
+/* ── Nav bar ─────────────────────────────────────────────── */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  height: var(--nav-height, 56px);
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--border, rgba(28, 28, 26, 0.12));
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(20px, 4vw, 56px);
+
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+/* ── Logo (left) ─────────────────────────────────────────── */
+.site-nav__logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 10px;
+}
+
+.site-nav__logo img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  opacity: 0.85;
+  display: block;
+  transition: opacity 150ms;
+}
+
+.site-nav__logo:hover img {
+  opacity: 1;
+}
+
+.site-nav__logo-text {
+  font-family: 'Slackside One', cursive;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text, #1C1C1A);
+  line-height: 1;
+}
+
+/* ── Links (right) ───────────────────────────────────────── */
+.site-nav__links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 4vw, 48px);
+}
+
+.site-nav__links a {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text, #1C1C1A);
+  opacity: 0.6;
+  transition: opacity 150ms;
+  position: relative;
+  padding-bottom: 3px;
+}
+
+.site-nav__links a:hover {
+  opacity: 1;
+}
+
+/* Active link — set aria-current="page" on the matching <a> */
+.site-nav__links a[aria-current="page"],
+.site-nav__links a.nav-link--active {
+  opacity: 1;
+  font-weight: 400;
+}
+
+.site-nav__links a[aria-current="page"]::after,
+.site-nav__links a.nav-link--active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+}
+
+/* ── Mobile (≤ 768px) ────────────────────────────────────── */
+@media (max-width: 768px) {
+  .site-nav {
+    height: 48px;
+    padding: 0 16px;
+  }
+
+  .site-nav__links {
+    gap: 20px;
+  }
+
+  .site-nav__links a {
+    font-size: 12px;
+  }
+
+  .site-nav__logo-text {
+    display: none; /* show only icon on mobile */
+  }
+}
+
+/* ── Focus accessibility ─────────────────────────────────── */
+.site-nav__links a:focus-visible,
+.site-nav__logo:focus-visible {
+  outline: 2px solid var(--text, #1C1C1A);
+  outline-offset: 4px;
+  border-radius: 2px;
+}

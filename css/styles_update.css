@@ -13,13 +13,13 @@ html, body {
 body {
   font-family: 'Slackside One', cursive;
   color: #fff;
-  background: #000; /* shown while image loads */
+  background: #FFFFFF; /* white behind nav while image loads */
 }
 
 /* Hero fills the viewport with the background image */
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--nav-height, 56px));
   display: flex;
   flex-direction: column;
   align-items: center; /* centers the logo block */
@@ -147,6 +147,17 @@ nav.site-nav {
 }
 
 /* Mobile adjustments */
-@media (max-width: 480px) {
-  nav.site-nav { padding-inline: 16px; }
+@media (max-width: 768px) {
+  .hero {
+    min-height: calc(100vh - 48px);
+    padding-top: 20px;
+  }
+
+  .brand img {
+    width: clamp(70px, 22vw, 120px);
+  }
+
+  .brand .wordmark {
+    font-size: clamp(32px, 7vw, 48px);
+  }
 }
