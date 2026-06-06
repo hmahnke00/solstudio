@@ -49,8 +49,8 @@ body {
   min-height: 0;
   overflow-x: auto;
   overflow-y: hidden;        /* scoped clip — not on body */
-  padding-top: 56px;
-  padding-bottom: 56px;
+  display: flex;
+  align-items: center;       /* centers grid vertically; remaining space splits equally top/bottom */
 }
 
 /* -------------------------------------------------------

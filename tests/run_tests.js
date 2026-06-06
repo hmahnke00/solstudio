@@ -264,12 +264,15 @@ suite('T5 — Gallery whitespace', () => {
     assertCSSContains('css/style_gallery.css', /\.gallery-section[^}]*overflow[^}]*hidden|overflow[^}]*hidden[^}]*\.gallery-section/, 'overflow: hidden on .gallery-section');
   });
 
-  test('gallery grid has padding-top of at least 48px', () => {
-    assertCSSContains('css/style_gallery.css', /padding-top\s*:\s*([4-9]\d|[1-9]\d{2,})px/, 'padding-top >= 48px');
+  test('gallery-section uses flexbox centering (align-items: center) for vertical balance', () => {
+    assertCSSContains('css/style_gallery.css', /\.gallery-section[^}]*align-items\s*:\s*center/s, 'align-items: center on .gallery-section');
   });
 
-  test('gallery grid has padding-bottom of at least 48px', () => {
-    assertCSSContains('css/style_gallery.css', /padding-bottom\s*:\s*([4-9]\d|[1-9]\d{2,})px/, 'padding-bottom >= 48px');
+  test('gallery.js defines VERT_FILL for vertical breathing room', () => {
+    const js = readFile('js/gallery.js');
+    if (!js.includes('VERT_FILL')) {
+      throw new Error('js/gallery.js does not define VERT_FILL');
+    }
   });
 
   test('gallery grid gap is still ≤ 4px (tight gutters preserved)', () => {
@@ -332,6 +335,115 @@ suite('T7 — Mobile: Gallery', () => {
 
   test('gallery mobile has no horizontal scroll (overflow-x: hidden)', () => {
     assertCSSContains('css/style_gallery.css', /overflow-x\s*:\s*hidden/, 'overflow-x: hidden on mobile');
+  });
+});
+
+// ─── GG-T1: Nav selector in gallery.js ───────────────────────────────────────
+
+suite('GG-T1 — Nav selector crash fix (js/gallery.js)', () => {
+  test('gallery.js does NOT reference .gallery-header (regression guard)', () => {
+    const js = readFile('js/gallery.js');
+    if (js.includes('.gallery-header')) {
+      throw new Error('js/gallery.js still contains .gallery-header — update to .site-nav');
+    }
+  });
+
+  test('gallery.js references .site-nav to measure header height', () => {
+    const js = readFile('js/gallery.js');
+    if (!js.includes('.site-nav')) {
+      throw new Error('js/gallery.js does not contain .site-nav');
+    }
+  });
+});
+
+// ─── GG-T2: 90% viewport fill calculation ────────────────────────────────────
+
+suite('GG-T2 — 90% viewport fill calculation (js/gallery.js)', () => {
+  test('FILL_TARGET constant is defined in gallery.js', () => {
+    const js = readFile('js/gallery.js');
+    if (!js.includes('FILL_TARGET')) {
+      throw new Error('js/gallery.js does not define FILL_TARGET');
+    }
+  });
+
+  test('setColumnWidth uses Math.max for fill-target vs aspect-ratio width', () => {
+    const js = readFile('js/gallery.js');
+    if (!js.includes('Math.max')) {
+      throw new Error('js/gallery.js does not use Math.max in column width calculation');
+    }
+  });
+
+  test('FILL_TARGET value is 0.90', () => {
+    const js = readFile('js/gallery.js');
+    if (!js.includes('FILL_TARGET') || !js.match(/FILL_TARGET\s*=\s*0\.9/)) {
+      throw new Error('FILL_TARGET is not set to 0.90 in gallery.js');
+    }
+  });
+});
+
+// ─── GG-T3: Thumbnail compression ────────────────────────────────────────────
+
+suite('GG-T3 — Thumbnail compression (gallery_photos/thumbnails/)', () => {
+  // Load GALLERY_DATA filenames from gallery-data.js
+  const galleryDataSrc = readFile('js/gallery-data.js');
+  const filenameMatches = galleryDataSrc.match(/"filename"\s*:\s*"([^"]+)"/g) || [];
+  const filenames = filenameMatches.map(m => m.match(/"([^"]+)"$/)[1]);
+
+  test('gallery_photos/thumbnails/ directory exists', () => {
+    assertFileExists('gallery_photos/thumbnails');
+  });
+
+  filenames.forEach(name => {
+    test(`thumbnail exists for ${name}`, () => {
+      assertFileExists(`gallery_photos/thumbnails/${name}`);
+    });
+
+    test(`thumbnail for ${name} is smaller than source`, () => {
+      const srcPath = path.join(ROOT, 'gallery_photos', name);
+      const thumbPath = path.join(ROOT, 'gallery_photos/thumbnails', name);
+      const srcStat = fs.statSync(srcPath);
+      const thumbStat = fs.statSync(thumbPath);
+      if (thumbStat.size >= srcStat.size) {
+        throw new Error(`thumbnail (${thumbStat.size}B) is not smaller than source (${srcStat.size}B)`);
+      }
+    });
+
+    test(`thumbnail for ${name} is under 150KB`, () => {
+      const thumbPath = path.join(ROOT, 'gallery_photos/thumbnails', name);
+      const thumbStat = fs.statSync(thumbPath);
+      if (thumbStat.size > 150 * 1024) {
+        throw new Error(`thumbnail is ${Math.round(thumbStat.size / 1024)}KB — exceeds 150KB`);
+      }
+    });
+  });
+});
+
+// ─── GG-T4: Thumbnails wired into gallery.js ─────────────────────────────────
+
+suite('GG-T4 — Thumbnails wired into buildGrid / refreshLightbox', () => {
+  test('buildGrid in gallery.js resolves img src from thumbnails/ path', () => {
+    const js = readFile('js/gallery.js');
+    if (!js.includes('thumbnails/')) {
+      throw new Error('js/gallery.js buildGrid does not reference thumbnails/ path');
+    }
+  });
+
+  test('refreshLightbox in gallery.js uses full-res gallery_photos/ (not thumbnails/)', () => {
+    const js = readFile('js/gallery.js');
+    // refreshLightbox should have gallery_photos/ and must NOT be thumbnails/ in that context
+    const lightboxFnMatch = js.match(/function refreshLightbox[\s\S]*?^  \}/m);
+    if (lightboxFnMatch && lightboxFnMatch[0].includes('thumbnails/')) {
+      throw new Error('refreshLightbox references thumbnails/ — lightbox must use full-res images');
+    }
+  });
+
+  test('all 30 GALLERY_DATA entries have a thumbnail field', () => {
+    const js = readFile('js/gallery-data.js');
+    const entries = js.match(/\{[\s\S]*?\}/g) || [];
+    const withoutThumbnail = entries.filter(e => e.includes('"filename"') && !e.includes('"thumbnail"'));
+    if (withoutThumbnail.length > 0) {
+      throw new Error(`${withoutThumbnail.length} GALLERY_DATA entries are missing a "thumbnail" field`);
+    }
   });
 });
 

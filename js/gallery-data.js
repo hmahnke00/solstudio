@@ -1,6 +1,7 @@
 var GALLERY_DATA = [
   {
     "filename": "california-surfer-backlit.jpg",
+    "thumbnail": "california-surfer-backlit.jpg",
     "series": "contact",
     "title": "Backlit",
     "location": "California",
@@ -11,6 +12,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "california-surfer-barrel.jpg",
+    "thumbnail": "california-surfer-barrel.jpg",
     "series": "contact",
     "title": "Barrel",
     "location": "California",
@@ -21,6 +23,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "california-surfer-drop.jpg",
+    "thumbnail": "california-surfer-drop.jpg",
     "series": "contact",
     "title": "Drop",
     "location": "California",
@@ -31,6 +34,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "california-surfer-elevated.jpg",
+    "thumbnail": "california-surfer-elevated.jpg",
     "series": "contact",
     "title": "Elevated",
     "location": "California",
@@ -41,6 +45,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "california-surfer-gray.jpg",
+    "thumbnail": "california-surfer-gray.jpg",
     "series": "contact",
     "title": "Gray Day",
     "location": "California",
@@ -51,6 +56,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "california-surfer-paddle.jpg",
+    "thumbnail": "california-surfer-paddle.jpg",
     "series": "contact",
     "title": "Paddle",
     "location": "California",
@@ -61,6 +67,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "california-surfer-sunset.jpg",
+    "thumbnail": "california-surfer-sunset.jpg",
     "series": "contact",
     "title": "Sunset",
     "location": "California",
@@ -71,6 +78,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "california-surfer-swell.jpg",
+    "thumbnail": "california-surfer-swell.jpg",
     "series": "contact",
     "title": "Swell",
     "location": "California",
@@ -81,6 +89,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "california-surfer-walk.jpg",
+    "thumbnail": "california-surfer-walk.jpg",
     "series": "contact",
     "title": "Walk",
     "location": "California",
@@ -91,6 +100,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "sierra-hiker-snow.jpg",
+    "thumbnail": "sierra-hiker-snow.jpg",
     "series": "contact",
     "title": "Snow",
     "location": "Sierra Nevada",
@@ -101,6 +111,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "tropics-wave-jungle.jpg",
+    "thumbnail": "tropics-wave-jungle.jpg",
     "series": "contact",
     "title": "Jungle Wave",
     "location": "Tropics",
@@ -111,6 +122,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "california-beach-sunset.jpg",
+    "thumbnail": "california-beach-sunset.jpg",
     "series": "small",
     "title": "Beach Sunset",
     "location": "California",
@@ -121,6 +133,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "california-cliff-silhouette.jpg",
+    "thumbnail": "california-cliff-silhouette.jpg",
     "series": "small",
     "title": "Cliff",
     "location": "California",
@@ -131,6 +144,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "california-sunset-figure.jpg",
+    "thumbnail": "california-sunset-figure.jpg",
     "series": "small",
     "title": "Figure",
     "location": "California",
@@ -141,6 +155,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "patagonia-hikers-ridge.jpg",
+    "thumbnail": "patagonia-hikers-ridge.jpg",
     "series": "small",
     "title": "Ridge",
     "location": "Patagonia",
@@ -151,6 +166,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "sierra-basecamp-tent.jpg",
+    "thumbnail": "sierra-basecamp-tent.jpg",
     "series": "small",
     "title": "Basecamp",
     "location": "Sierra Nevada",
@@ -161,6 +177,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "tropics-beach-dawn.jpg",
+    "thumbnail": "tropics-beach-dawn.jpg",
     "series": "small",
     "title": "Dawn",
     "location": "Tropics",
@@ -171,6 +188,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "alps-aerial-dawn.jpg",
+    "thumbnail": "alps-aerial-dawn.jpg",
     "series": "witness",
     "title": "Alps at Dawn",
     "location": "Alps",
@@ -181,6 +199,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "banff-lake-reflection.jpg",
+    "thumbnail": "banff-lake-reflection.jpg",
     "series": "witness",
     "title": "Reflection",
     "location": "Canadian Rockies",
@@ -191,6 +210,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "california-beach-sunrise.jpg",
+    "thumbnail": "california-beach-sunrise.jpg",
     "series": "witness",
     "title": "Sunrise",
     "location": "California",
@@ -201,6 +221,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "california-wave-barrel.jpg",
+    "thumbnail": "california-wave-barrel.jpg",
     "series": "witness",
     "title": "Barrel",
     "location": "California",
@@ -211,6 +232,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "lake-ripples.jpg",
+    "thumbnail": "lake-ripples.jpg",
     "series": "witness",
     "title": "Ripples",
     "location": "",
@@ -221,6 +243,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "ocean-surface.jpg",
+    "thumbnail": "ocean-surface.jpg",
     "series": "witness",
     "title": "Surface",
     "location": "",
@@ -231,6 +254,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "oregon-coast-seastack.jpg",
+    "thumbnail": "oregon-coast-seastack.jpg",
     "series": "witness",
     "title": "Sea Stack",
     "location": "Oregon Coast",
@@ -241,6 +265,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "patagonia-glacier.jpg",
+    "thumbnail": "patagonia-glacier.jpg",
     "series": "witness",
     "title": "Glacier",
     "location": "Patagonia",
@@ -251,6 +276,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "rockies-aerial.jpg",
+    "thumbnail": "rockies-aerial.jpg",
     "series": "witness",
     "title": "Aerial",
     "location": "Canadian Rockies",
@@ -261,6 +287,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "rockies-reflection.jpg",
+    "thumbnail": "rockies-reflection.jpg",
     "series": "witness",
     "title": "Reflection",
     "location": "Canadian Rockies",
@@ -271,6 +298,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "sierra-lone-tree.jpg",
+    "thumbnail": "sierra-lone-tree.jpg",
     "series": "witness",
     "title": "Lone Tree",
     "location": "Sierra Nevada",
@@ -281,6 +309,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "sierra-storm-bw.jpg",
+    "thumbnail": "sierra-storm-bw.jpg",
     "series": "witness",
     "title": "Storm",
     "location": "Sierra Nevada",
@@ -291,6 +320,7 @@ var GALLERY_DATA = [
   },
   {
     "filename": "tetons-sunrise.jpg",
+    "thumbnail": "tetons-sunrise.jpg",
     "series": "witness",
     "title": "Sunrise",
     "location": "Tetons",

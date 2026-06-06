@@ -6,13 +6,14 @@
 (function () {
 
   var grid        = document.getElementById('gallery-grid');
-  var section     = document.querySelector('.gallery-section');
-  var header      = document.querySelector('.gallery-header');
+  var header      = document.querySelector('.site-nav');
   var lightbox    = document.getElementById('lightbox');
   var lightboxImg = document.getElementById('lightbox-img');
 
   var photos       = [];
   var currentIndex = 0;
+  var FILL_TARGET  = 0.90;
+  var VERT_FILL    = 0.82;  // grid height fraction; remaining space split equally top/bottom
 
   /* ----------------------------------------------------------
      1. Load gallery data (inlined via gallery-data.js to support
@@ -37,7 +38,7 @@
       fig.className = 'grid-item';
 
       var img = document.createElement('img');
-      img.src      = 'gallery_photos/' + photo.filename;
+      img.src      = 'gallery_photos/thumbnails/' + (photo.thumbnail || photo.filename);
       img.alt      = photo.alt || photo.title;
       img.loading  = 'lazy';
       img.decoding = 'async';
@@ -51,12 +52,13 @@
   }
 
   /* ----------------------------------------------------------
-     3. Set grid height + column width so cells are 4:3 rectangles.
+     3. Set grid height + column width so cells fill ≥90% of viewport.
         Recalculates on resize.
      ---------------------------------------------------------- */
   function setColumnWidth() {
-    var headerH  = header.offsetHeight;
-    var sectionH = window.innerHeight - headerH;
+    var headerH   = header.offsetHeight;
+    var available = window.innerHeight - headerH;
+    var sectionH  = Math.floor(available * VERT_FILL);
     if (sectionH <= 0) {
       requestAnimationFrame(setColumnWidth);
       return;
@@ -65,7 +67,9 @@
     var pad  = 2;
     var rows = 3;
     var rowH = (sectionH - 2 * pad - (rows - 1) * gap) / rows;
-    var colW = Math.floor((rowH * 16) / 9);
+    var aspectRatioW = Math.floor((rowH * 16) / 9);
+    var minFillW     = Math.floor((window.innerWidth * FILL_TARGET) / rows);
+    var colW = Math.max(aspectRatioW, minFillW);
     grid.style.height          = sectionH + 'px';
     grid.style.gridAutoColumns = colW + 'px';
   }
