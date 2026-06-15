@@ -18,6 +18,9 @@
   /* Navigation */
   --nav-height:     56px;
 
+  /* Gallery sidebar */
+  --sidebar-width:  160px;
+
   /* Typography */
   --font-brand: 'Slackside One', cursive;
   --font-body:  'Inter', sans-serif;

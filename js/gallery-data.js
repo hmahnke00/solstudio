@@ -330,3 +330,7 @@ var GALLERY_DATA = [
     "alt": "Sunrise \u2014 Sol Studio"
   }
 ];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { GALLERY_DATA };
+}

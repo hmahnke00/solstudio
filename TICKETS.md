@@ -1,28 +1,142 @@
-# Sol Studio — Gallery Grid Fix & Image Compression
+# Sol Studio — Gallery Improvements
 
-Kanban board generated from `PRD_gallery_grid_fix.md`.
+Kanban board generated from `GALLERY_IMPROVEMENTS_PRD.md`.
 
 ---
 
 ## Backlog
 
-### T5 — Visual sign-off
+### T1 — Layout Foundation: Sidebar Column + buildGrid Refactor
 
-**Type**: AFK  
-**Blocked by**: T1, T2, T3, T4
+**Type**: AFK
+**Blocked by**: None — can start immediately
 
 #### What to build
 
-Load the live gallery page in a browser using Claude in Chrome and capture screenshots for human review. Verify the grid renders correctly at desktop width, images load at acceptable speed, the lightbox opens full-resolution images, and mobile layout is unaffected. Deliver annotated screenshots covering each criterion below so the site owner can approve before merge.
+Introduce a `<aside class="gallery-sidebar">` element in `gallery.html` containing the Sol Studio sun logo (linking to home). Define `--sidebar-width: 160px` as a CSS custom property on `:root` in `css/tokens.css`. The sidebar sits as a fixed-width left column in document flow — not an overlay.
+
+Refactor `buildGrid()` in `gallery.js` to accept a photo array argument instead of always using the module-scoped `photos` variable. Update `setColumnWidth()` to read `gallerySection.clientWidth` instead of `window.innerWidth` so the sidebar width is naturally excluded from the fill calculation.
 
 #### Acceptance criteria
 
-- [ ] Screenshot: gallery at 1440px — grid visibly fills ~90% of horizontal space
-- [ ] Screenshot: gallery at 1440px — no collapsed strip or empty white space on the right
-- [ ] Screenshot: lightbox open on a clicked image — full-res image displayed, prev/next/close controls visible
-- [ ] Screenshot: gallery at 390px — single-column vertical layout intact, no regression
-- [ ] Screenshot: DevTools Network panel showing grid images loading from `thumbnails/` path
-- [ ] Site owner reviews and approves all screenshots
+- [ ] `--sidebar-width` custom property defined in `css/tokens.css`
+- [ ] `<aside class="gallery-sidebar">` exists in `gallery.html` with Sol Studio logo link
+- [ ] `buildGrid(data)` accepts a photo array argument
+- [ ] `setColumnWidth()` reads from `gallerySection.clientWidth`, not `window.innerWidth`
+- [ ] Grid renders correctly with sidebar taking left column space
+- [ ] All existing tests pass
+
+---
+
+### T2 — Filter Logic: filterPhotos Function + Unit Tests
+
+**Type**: AFK
+**Blocked by**: None — can start immediately (parallel with T1)
+
+#### What to build
+
+Extract `filterPhotos(data, filterState)` as a pure exported function in a new `js/gallery-filter.js` module. `filterState` is `{ series: string|null, environment: string|null }`. A `null` axis matches all photos on that axis. Two active filters use AND intersection. Also implement `deriveFilterValues(data)` which returns `{ series: string[], environment: string[] }` — unique sorted values extracted dynamically from the data array.
+
+Write unit tests for both functions in `tests/run_tests.js` following the existing pattern (no DOM, no browser — pure Node).
+
+#### Acceptance criteria
+
+- [ ] `filterPhotos(data, { series: null, environment: null })` returns all 30 photos
+- [ ] `filterPhotos(data, { series: 'witness', environment: null })` returns only witness photos
+- [ ] `filterPhotos(data, { series: 'contact', environment: 'mountain' })` returns only the AND intersection (sierra-hiker-snow.jpg)
+- [ ] `filterPhotos(data, { series: 'witness', environment: 'coastal' })` returns only matching photos
+- [ ] `filterPhotos(data, { series: 'small', environment: 'ocean' })` returns empty array (no match)
+- [ ] `deriveFilterValues(data)` returns sorted unique series and environment arrays
+- [ ] All tests pass
+
+---
+
+### T3 — Filter UI Panel: Toggle, Radio Buttons, Scroll Collapse
+
+**Type**: AFK
+**Blocked by**: T1 (sidebar layout), T2 (filterPhotos function)
+
+#### What to build
+
+Add the filter toggle button and filter panel inside the `.gallery-sidebar`. The panel contains two `<fieldset>` elements — one for `series`, one for `environment` — each with radio buttons. "All" is the default selected option for each axis. Filter values are derived dynamically from `GALLERY_DATA` via `deriveFilterValues()` at page load. Display labels are title-cased (e.g. `"witness"` → `"Witness"`).
+
+Wire the radio button state to `filterPhotos()` → `buildGrid()` → `setColumnWidth()` so the grid rebuilds immediately on filter change. Add scroll-aware collapse: when the gallery section scrolls horizontally, the filter panel gets a `filter-panel--collapsed` CSS class; class is removed on scroll-end (debounced) or when the cursor re-enters the sidebar. All filter controls are keyboard accessible.
+
+#### Acceptance criteria
+
+- [ ] Filter panel renders series and environment options derived dynamically from `GALLERY_DATA`
+- [ ] Display labels are title-cased
+- [ ] Selecting a series filter rebuilds the grid with only matching photos
+- [ ] Selecting an environment filter rebuilds the grid with only matching photos
+- [ ] Two active filters apply AND intersection
+- [ ] Clicking an active radio again (or selecting "All") returns the full gallery
+- [ ] Filter panel collapses on horizontal scroll and reappears on scroll-end or sidebar hover
+- [ ] Filter controls are navigable by keyboard (Tab + arrow keys)
+- [ ] All tests pass
+
+---
+
+### T4 — Caption Hover Overlays
+
+**Type**: AFK
+**Blocked by**: T1 (buildGrid refactor)
+
+#### What to build
+
+Inject a `<figcaption>` element inside each `.grid-item` figure in `buildGrid()`. The figcaption renders `series` and `location` separated by an em dash. When `location` is empty string, render only `series` with no trailing separator.
+
+CSS in `style_gallery.css` handles the overlay: `position: absolute; bottom: 0`, gradient background from `transparent` to `rgba(0,0,0,0.52)`, white Inter text at 11–12px. Default opacity `0`; on `.grid-item:hover figcaption` opacity becomes `1`. Transition: `opacity 200ms ease`. Under `prefers-reduced-motion: reduce`, the transition is removed. The lightbox remains image-only — no captions there.
+
+#### Acceptance criteria
+
+- [ ] Hovering a grid image reveals series and location text
+- [ ] Caption appears as a gradient overlay from the bottom of the image
+- [ ] Caption fades in smoothly (200ms) on hover
+- [ ] Photos with empty `location` show only the series name (no trailing separator)
+- [ ] `prefers-reduced-motion: reduce` disables the opacity transition
+- [ ] Lightbox has no caption
+- [ ] All tests pass
+
+---
+
+### T5 — Nav Collapse Toggle
+
+**Type**: AFK
+**Blocked by**: T1 (setColumnWidth refactor)
+
+#### What to build
+
+Add a `<button class="nav-collapse-toggle">` to the right side of `.site-nav` in `gallery.html` only (not in shared nav markup on other pages). The button uses a minimal CSS-only chevron or Unicode character — no additional image assets.
+
+On click: toggle `nav-hidden` on `document.body`. CSS in `style_gallery.css` (not `nav.css`): `.nav-hidden .site-nav { transform: translateY(-100%); transition: transform 300ms ease; }`. On `mousemove` where `clientY < 8`: remove `nav-hidden`. After the nav transition ends (`transitionend`), call `setColumnWidth()` so the grid height recalculates against the updated `header.offsetHeight`.
+
+#### Acceptance criteria
+
+- [ ] Nav collapse toggle button visible in gallery nav only
+- [ ] Clicking toggle slides nav off-screen
+- [ ] Clicking toggle again (or moving mouse to top 8px) slides nav back
+- [ ] Grid height recalculates after nav transition completes
+- [ ] Nav collapse styles live in `style_gallery.css`, not `nav.css`
+- [ ] About and Contact pages are unaffected
+- [ ] All tests pass
+
+---
+
+### T6 — Mobile Filter UX
+
+**Type**: HITL
+**Blocked by**: T3 (filter UI panel)
+
+#### What to build
+
+Design decision needed: on viewports ≤ 768px, the left sidebar cannot occupy horizontal space without crushing the gallery. Choose between a bottom drawer (slides up from bottom edge, triggered by a floating filter button) or a top dropdown (collapses from below the nav). Once the approach is decided, implement so filters don't consume vertical space by default on mobile.
+
+#### Acceptance criteria
+
+- [ ] Human selects: bottom sheet or dropdown
+- [ ] Filter controls accessible on mobile without sidebar eating into gallery space
+- [ ] Selected approach implemented and tested on a 390px viewport
+- [ ] All tests pass
 
 ---
 
@@ -34,83 +148,4 @@ Load the live gallery page in a browser using Claude in Chrome and capture scree
 
 ## Done
 
-### T1 — Fix nav selector crash
-
-**Type**: AFK  
-**Blocked by**: None — can start immediately
-
-#### What to build
-
-Patch the single broken selector in `gallery.js` that causes `setColumnWidth()` to throw a TypeError on every page load. The fix is changing `.gallery-header` to `.site-nav` so the nav height is measured correctly and the grid receives its dimensions.
-
-#### Acceptance criteria
-
-- [x] Test (written first): `gallery.js` does NOT reference `.gallery-header` (regression guard)
-- [x] Test (written first): `gallery.js` references `.site-nav`
-- [x] Test (written first): `document.querySelector('.gallery-header')` returns null in `gallery.html` (regression guard) — covered by existing T3 suite
-- [x] Test (written first): `document.querySelector('.site-nav')` returns a non-null element in `gallery.html` — covered by existing T3 suite
-- [x] Selector updated from `.gallery-header` to `.site-nav` in `gallery.js`
-- [x] Dead `var section` variable removed
-- [x] All tests pass
-
----
-
-### T2 — 90% viewport fill calculation
-
-**Type**: AFK  
-**Blocked by**: T1 — Fix nav selector crash
-
-#### What to build
-
-Update `setColumnWidth()` in `gallery.js` to guarantee the full grid width is at least 90% of the viewport on initial load. Introduce a `FILL_TARGET` constant (0.90) at the top of the IIFE. Column width becomes the larger of the aspect-ratio-derived width and a minimum width computed from the fill target.
-
-#### Acceptance criteria
-
-- [x] Test (written first): `FILL_TARGET` constant defined in `gallery.js`
-- [x] Test (written first): `setColumnWidth` uses `Math.max` for fill-target vs aspect-ratio width
-- [x] Test (written first): `FILL_TARGET` value is 0.90
-- [x] `FILL_TARGET = 0.90` constant defined at the top of the IIFE
-- [x] `colW` uses `Math.max(aspectRatioWidth, minFillWidth)` formula
-- [x] All tests pass
-
----
-
-### T3 — Thumbnail compression script
-
-**Type**: AFK  
-**Blocked by**: None — can start immediately (parallel with T1/T2)
-
-#### What to build
-
-Write `scripts/compress-thumbnails.sh` — an idempotent ImageMagick script that reads every `.jpg` in `gallery_photos/` and writes a compressed copy to `gallery_photos/thumbnails/`. Spec: 800px max width, JPEG quality 82, EXIF stripped, output filename identical to source. Skips files where the thumbnail is already newer than the source.
-
-#### Acceptance criteria
-
-- [x] Test (written first): every filename in `GALLERY_DATA` has a matching file in `gallery_photos/thumbnails/`
-- [x] Test (written first): every thumbnail is strictly smaller in bytes than its full-res source
-- [x] Test (written first): no thumbnail file exceeds 150KB
-- [x] `scripts/compress-thumbnails.sh` exists and is executable
-- [x] Script is idempotent — re-running does not re-process up-to-date thumbnails
-- [x] All 30 thumbnails committed to `gallery_photos/thumbnails/`
-- [x] All tests pass
-
----
-
-### T4 — Wire thumbnails into gallery data & JS
-
-**Type**: AFK  
-**Blocked by**: T3 — Thumbnail compression script
-
-#### What to build
-
-Add a `thumbnail` field to every entry in `gallery-data.js`. Update `buildGrid()` in `gallery.js` to resolve grid `<img>` src as `gallery_photos/thumbnails/` + `photo.thumbnail || photo.filename`. The lightbox `refreshLightbox()` must continue resolving to `gallery_photos/` + `photo.filename` (full-res, unchanged).
-
-#### Acceptance criteria
-
-- [x] Test (written first): `buildGrid` in `gallery.js` resolves img src from `thumbnails/` path
-- [x] Test (written first): `refreshLightbox` in `gallery.js` uses full-res `gallery_photos/` (not `thumbnails/`)
-- [x] Test (written first): all 30 `GALLERY_DATA` entries have a `thumbnail` field
-- [x] `thumbnail` field added to all 30 entries in `gallery-data.js`
-- [x] `buildGrid()` updated to use `thumbnails/` prefix for grid images
-- [x] `refreshLightbox()` unchanged — continues to use full-res path
-- [x] All tests pass
+*(none)*

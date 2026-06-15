@@ -32,9 +32,19 @@
   </div>
 </nav>
 
-  <section class="gallery-section">
-    <main class="gallery-grid" id="gallery-grid"></main>
-  </section>
+  <div class="gallery-layout">
+    <aside class="gallery-sidebar">
+      <a href="./index.html" class="sidebar-logo" aria-label="Sol Studio home">
+        <img src="Branding/solstudiocutout.png" alt="Sol Studio sun">
+      </a>
+      <button class="filter-toggle" aria-expanded="true" aria-controls="filter-panel">Filter</button>
+      <div class="filter-panel" id="filter-panel"></div>
+    </aside>
+
+    <section class="gallery-section" id="gallery-section">
+      <main class="gallery-grid" id="gallery-grid"></main>
+    </section>
+  </div>
 
   <!-- Lightbox overlay -->
   <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" hidden>
@@ -45,6 +55,7 @@
   </div>
 
   <script src="./js/gallery-data.js"></script>
+  <script src="./js/gallery-filter.js"></script>
   <script src="./js/gallery.js?v=6"></script>
 </body>
 </html>

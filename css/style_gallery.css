@@ -42,6 +42,35 @@ body {
 .gallery-logo:hover img { opacity: 1; }
 
 /* -------------------------------------------------------
+   Gallery layout — sidebar + section two-column row
+   ------------------------------------------------------- */
+.gallery-layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.gallery-sidebar {
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+}
+
+.sidebar-logo img {
+  width: 32px;
+  height: auto;
+  display: block;
+  opacity: 0.8;
+  transition: opacity 150ms;
+}
+.sidebar-logo:hover img { opacity: 1; }
+
+/* -------------------------------------------------------
    Gallery section — horizontal scroll container (desktop)
    ------------------------------------------------------- */
 .gallery-section {
@@ -74,6 +103,28 @@ body {
   cursor: pointer;
   margin: 0;
   padding: 0;
+  position: relative;
+}
+
+.grid-item figcaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 10px 8px;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.52));
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+
+.grid-item:hover figcaption {
+  opacity: 1;
 }
 
 .grid-item img {
@@ -153,10 +204,72 @@ body {
 }
 
 /* -------------------------------------------------------
+   Filter panel
+   ------------------------------------------------------- */
+.filter-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 12px;
+  margin-top: 16px;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.filter-panel {
+  overflow: hidden;
+  transition: opacity 200ms ease;
+}
+
+.filter-panel--collapsed {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.filter-fieldset {
+  border: none;
+  padding: 12px 12px 4px;
+}
+
+.filter-fieldset legend {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.filter-fieldset label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text);
+  padding: 3px 0;
+  cursor: pointer;
+}
+
+.filter-fieldset input[type="radio"] {
+  margin-right: 6px;
+  accent-color: var(--text);
+}
+
+/* -------------------------------------------------------
    Reduced motion
    ------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .grid-item img { transition: none; }
+  .grid-item figcaption { transition: none; }
 }
 
 /* -------------------------------------------------------
@@ -191,7 +304,7 @@ body {
   .grid-item {
     width: 100%;
     height: auto;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 4 / 3;
   }
 
   .grid-item img {

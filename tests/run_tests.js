@@ -10,6 +10,27 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 
+// ─── JS module imports (guarded so missing files fail tests, not the runner) ──
+
+let filterPhotos = null;
+let deriveFilterValues = null;
+let toTitleCase = null;
+let captionText = null;
+let GALLERY_DATA_NODE = null;
+
+try {
+  const filter = require('../js/gallery-filter.js');
+  filterPhotos = filter.filterPhotos;
+  deriveFilterValues = filter.deriveFilterValues;
+  toTitleCase = filter.toTitleCase;
+  captionText = filter.captionText;
+} catch (_) { /* module not yet created — GI-T2 tests will fail */ }
+
+try {
+  const gd = require('../js/gallery-data.js');
+  GALLERY_DATA_NODE = gd.GALLERY_DATA;
+} catch (_) { /* module not yet exporting — GI-T2 tests will fail */ }
+
 // ─── Tiny test runner ────────────────────────────────────────────────────────
 
 let passed = 0;
@@ -444,6 +465,177 @@ suite('GG-T4 — Thumbnails wired into buildGrid / refreshLightbox', () => {
     if (withoutThumbnail.length > 0) {
       throw new Error(`${withoutThumbnail.length} GALLERY_DATA entries are missing a "thumbnail" field`);
     }
+  });
+});
+
+// ─── GI-T2: filterPhotos pure function ───────────────────────────────────────
+
+suite('GI-T2 — filterPhotos (js/gallery-filter.js)', () => {
+  function requireFilter(label, fn) {
+    test(label, () => {
+      if (!filterPhotos || !GALLERY_DATA_NODE) throw new Error('gallery-filter.js or gallery-data.js not loaded');
+      fn();
+    });
+  }
+
+  requireFilter('filterPhotos: null+null returns all photos', () => {
+    const result = filterPhotos(GALLERY_DATA_NODE, { series: null, environment: null });
+    if (result.length !== GALLERY_DATA_NODE.length) {
+      throw new Error(`Expected ${GALLERY_DATA_NODE.length} photos, got ${result.length}`);
+    }
+  });
+
+  requireFilter('filterPhotos: series=witness returns only witness photos', () => {
+    const result = filterPhotos(GALLERY_DATA_NODE, { series: 'witness', environment: null });
+    const expected = GALLERY_DATA_NODE.filter(p => p.series === 'witness');
+    if (result.length !== expected.length) throw new Error(`Expected ${expected.length} witness photos, got ${result.length}`);
+    if (result.some(p => p.series !== 'witness')) throw new Error('Result contains non-witness photos');
+  });
+
+  requireFilter('filterPhotos: AND intersection — contact+mountain returns only sierra-hiker-snow', () => {
+    const result = filterPhotos(GALLERY_DATA_NODE, { series: 'contact', environment: 'mountain' });
+    if (result.length !== 1) throw new Error(`Expected 1 photo, got ${result.length}`);
+    if (result[0].filename !== 'sierra-hiker-snow.jpg') throw new Error(`Expected sierra-hiker-snow.jpg, got ${result[0].filename}`);
+  });
+
+  requireFilter('filterPhotos: no-match returns empty array', () => {
+    const result = filterPhotos(GALLERY_DATA_NODE, { series: 'small', environment: 'ocean' });
+    if (result.length !== 0) throw new Error(`Expected 0 photos, got ${result.length}`);
+  });
+
+  requireFilter('filterPhotos: witness+coastal returns correct subset', () => {
+    const result = filterPhotos(GALLERY_DATA_NODE, { series: 'witness', environment: 'coastal' });
+    const expected = GALLERY_DATA_NODE.filter(p => p.series === 'witness' && p.environment === 'coastal');
+    if (result.length !== expected.length) throw new Error(`Expected ${expected.length}, got ${result.length}`);
+    if (result.some(p => p.series !== 'witness' || p.environment !== 'coastal')) throw new Error('Result contains photos outside witness+coastal');
+  });
+
+  requireFilter('deriveFilterValues: returns sorted unique series', () => {
+    const { series } = deriveFilterValues(GALLERY_DATA_NODE);
+    const expected = ['contact', 'small', 'witness'];
+    if (JSON.stringify(series) !== JSON.stringify(expected)) throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(series)}`);
+  });
+
+  requireFilter('deriveFilterValues: returns sorted unique environments', () => {
+    const { environment } = deriveFilterValues(GALLERY_DATA_NODE);
+    const expected = ['coastal', 'lake', 'mountain', 'ocean'];
+    if (JSON.stringify(environment) !== JSON.stringify(expected)) throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(environment)}`);
+  });
+});
+
+// ─── GI-T1: Layout foundation structural checks ──────────────────────────────
+
+suite('GI-T1 — Layout foundation', () => {
+  test('tokens.css defines --sidebar-width', () => {
+    assertCSSContains('css/tokens.css', '--sidebar-width', '--sidebar-width');
+  });
+
+  test('gallery.html has <aside class="gallery-sidebar">', () => {
+    assertHTMLContains('gallery.html', /class="[^"]*gallery-sidebar[^"]*"/, 'gallery-sidebar aside');
+  });
+
+  test('gallery.js buildGrid accepts a data argument (not always uses module-scoped photos)', () => {
+    const js = readFile('js/gallery.js');
+    if (!js.match(/function buildGrid\s*\(\s*\w+\s*\)/)) {
+      throw new Error('buildGrid does not accept a parameter');
+    }
+  });
+
+  test('gallery.js setColumnWidth reads gallerySection.clientWidth (not window.innerWidth for fill)', () => {
+    const js = readFile('js/gallery.js');
+    if (!js.includes('clientWidth')) {
+      throw new Error('gallery.js setColumnWidth does not reference clientWidth');
+    }
+  });
+});
+
+// ─── GI-T4: Caption overlay structural checks ────────────────────────────────
+
+suite('GI-T4 — Caption overlay', () => {
+  test('style_gallery.css has figcaption opacity transition', () => {
+    assertCSSContains('css/style_gallery.css', /figcaption/, 'figcaption rule');
+  });
+
+  test('style_gallery.css caption gradient goes to rgba(0,0,0', () => {
+    assertCSSContains('css/style_gallery.css', /rgba\(0,\s*0,\s*0/, 'rgba black gradient');
+  });
+
+  test('style_gallery.css has prefers-reduced-motion rule for caption', () => {
+    assertCSSContains('css/style_gallery.css', 'prefers-reduced-motion', 'prefers-reduced-motion');
+  });
+
+  test('gallery.js buildGrid injects figcaption', () => {
+    assertCSSContains('css/style_gallery.css', /figcaption/, 'figcaption in buildGrid');
+    const js = readFile('js/gallery.js');
+    if (!js.includes('figcaption')) {
+      throw new Error('gallery.js buildGrid does not create figcaption');
+    }
+  });
+});
+
+// ─── GI-T3: Filter UI structural + pure-function tests ───────────────────────
+
+suite('GI-T3 — Filter UI (gallery-filter.js + gallery.html + gallery.js)', () => {
+  function requireFilter(label, fn) {
+    test(label, () => {
+      if (!filterPhotos || !GALLERY_DATA_NODE) throw new Error('gallery-filter.js or gallery-data.js not loaded');
+      fn();
+    });
+  }
+
+  // Pure functions in gallery-filter.js
+  requireFilter('toTitleCase: capitalises first letter of a slug', () => {
+    if (!toTitleCase) throw new Error('toTitleCase not exported from gallery-filter.js');
+    if (toTitleCase('witness') !== 'Witness') throw new Error('Expected "Witness"');
+    if (toTitleCase('ocean') !== 'Ocean') throw new Error('Expected "Ocean"');
+  });
+
+  requireFilter('captionText: series — location when location is present', () => {
+    if (!captionText) throw new Error('captionText not exported from gallery-filter.js');
+    const result = captionText({ series: 'witness', location: 'California' });
+    if (result !== 'witness — California') throw new Error(`Expected "witness — California", got "${result}"`);
+  });
+
+  requireFilter('captionText: series only when location is empty string', () => {
+    if (!captionText) throw new Error('captionText not exported from gallery-filter.js');
+    const result = captionText({ series: 'witness', location: '' });
+    if (result !== 'witness') throw new Error(`Expected "witness", got "${result}"`);
+    if (result.includes('—')) throw new Error('Empty location produced a separator');
+  });
+
+  // Structural: HTML
+  test('gallery.html loads gallery-filter.js before gallery.js', () => {
+    const html = readFile('gallery.html');
+    const filterPos = html.indexOf('gallery-filter.js');
+    const galleryPos = html.indexOf('gallery.js');
+    if (filterPos === -1) throw new Error('gallery-filter.js script tag missing');
+    if (filterPos > galleryPos) throw new Error('gallery-filter.js must be loaded before gallery.js');
+  });
+
+  test('gallery.html sidebar has .filter-toggle button', () => {
+    assertHTMLContains('gallery.html', /filter-toggle/, '.filter-toggle button');
+  });
+
+  test('gallery.html sidebar has .filter-panel', () => {
+    assertHTMLContains('gallery.html', /filter-panel/, '.filter-panel element');
+  });
+
+  // Structural: JS
+  test('gallery.js clears the grid before each rebuild', () => {
+    const js = readFile('js/gallery.js');
+    if (!js.includes('innerHTML') && !js.match(/while\s*\(.*firstChild/)) {
+      throw new Error('buildGrid does not clear grid.innerHTML before rebuilding');
+    }
+  });
+
+  test('gallery.js calls filterPhotos on filter change', () => {
+    const js = readFile('js/gallery.js');
+    if (!js.includes('filterPhotos')) throw new Error('gallery.js does not call filterPhotos');
+  });
+
+  test('gallery.js calls deriveFilterValues to populate filter UI', () => {
+    const js = readFile('js/gallery.js');
+    if (!js.includes('deriveFilterValues')) throw new Error('gallery.js does not call deriveFilterValues');
   });
 });
 
