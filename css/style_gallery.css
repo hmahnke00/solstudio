@@ -1,6 +1,5 @@
 /* ============================================================
    Sol Studio — Gallery styles
-   3-row horizontal scroll grid + lightbox.
    ============================================================ */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -9,7 +8,6 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  /* overflow managed per-section below, not on body */
 }
 
 body {
@@ -21,28 +19,101 @@ body {
 }
 
 /* -------------------------------------------------------
-   Header
+   Nav
    ------------------------------------------------------- */
-.gallery-header {
-  flex-shrink: 0;
+.gallery-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg);
   display: flex;
   align-items: center;
-  padding: clamp(14px, 2vh, 24px) clamp(20px, 3vw, 48px);
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
+  justify-content: space-between;
+  padding: 18px clamp(20px, 4vw, 56px);
+  flex-shrink: 0;
 }
 
-.gallery-logo img {
-  width: clamp(28px, 3vw, 40px);
-  height: auto;
-  display: block;
-  opacity: 0.8;
+.gallery-nav__contact {
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
   transition: opacity 150ms;
 }
-.gallery-logo:hover img { opacity: 1; }
+.gallery-nav__contact:hover { opacity: 0.55; }
+
+.gallery-nav__right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  position: relative;
+}
+
+.gallery-nav__menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.gallery-nav__menu-label {
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.gallery-nav__hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 30px;
+}
+
+.gallery-nav__hamburger span {
+  display: block;
+  height: 1.5px;
+  background: var(--text);
+}
+
+.gallery-nav__dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 12px 0;
+  min-width: 140px;
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+}
+
+.gallery-nav__dropdown[hidden] { display: none; }
+
+.gallery-nav__dropdown a {
+  display: block;
+  padding: 8px 20px;
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text);
+  opacity: 0.55;
+  transition: opacity 150ms;
+}
+.gallery-nav__dropdown a:hover,
+.gallery-nav__dropdown a[aria-current="page"] { opacity: 1; }
 
 /* -------------------------------------------------------
-   Gallery layout — sidebar + section two-column row
+   Layout
    ------------------------------------------------------- */
 .gallery-layout {
   display: flex;
@@ -50,84 +121,135 @@ body {
   min-height: 0;
 }
 
-.gallery-sidebar {
-  width: var(--sidebar-width);
+/* Logo rail */
+.gallery-logo-rail {
+  width: 62px;
   flex-shrink: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding-top: 20px;
-  background: var(--bg);
-  border-right: 1px solid var(--border);
+  justify-content: center;
 }
 
-.sidebar-logo img {
-  width: 32px;
-  height: auto;
+.gallery-logo-rail img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
   display: block;
-  opacity: 0.8;
+  opacity: 0.85;
   transition: opacity 150ms;
 }
-.sidebar-logo:hover img { opacity: 1; }
+.gallery-logo-rail a:hover img { opacity: 1; }
 
-/* -------------------------------------------------------
-   Gallery section — horizontal scroll container (desktop)
-   ------------------------------------------------------- */
-.gallery-section {
-  flex: 1;
-  min-height: 0;
-  overflow-x: auto;
-  overflow-y: hidden;        /* scoped clip — not on body */
+/* Filter aside */
+.gallery-filter-aside {
+  width: 204px;
+  flex-shrink: 0;
+  padding: 44px 30px;
   display: flex;
-  align-items: center;       /* centers grid vertically; remaining space splits equally top/bottom */
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  transition: width 250ms ease, opacity 250ms ease, padding 250ms ease;
+}
+
+.gallery-filter-aside.is-hidden {
+  width: 0;
+  opacity: 0;
+  padding-left: 0;
+  padding-right: 0;
+  pointer-events: none;
+}
+
+.filter-label {
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  margin-bottom: 24px;
+  white-space: nowrap;
+}
+
+.filter-group { }
+
+.filter-group + .filter-group { margin-top: 28px; }
+
+.filter-group-label {
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  white-space: nowrap;
+}
+
+.filter-btn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filter-btn {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 20px;
+  letter-spacing: 0.01em;
+  color: var(--text-secondary);
+  transition: color 200ms ease;
+  white-space: nowrap;
+}
+
+.filter-btn:hover { color: var(--text); }
+
+.filter-btn.is-active { color: var(--text); }
+
+.filter-btn.is-active::before {
+  content: '● ';
+  color: #E08A3C;
+  font-size: 12px;
+  vertical-align: middle;
 }
 
 /* -------------------------------------------------------
-   Gallery grid — 3 rows, auto columns, flows right
-   grid-auto-columns is set by JS based on measured row height
+   Gallery main — horizontal scroll
    ------------------------------------------------------- */
+.gallery-main {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  align-items: center;
+}
+
 .gallery-grid {
   display: grid;
   grid-template-rows: repeat(3, 1fr);
   grid-auto-flow: column;
-  /* height and grid-auto-columns set by JS */
   gap: 2px;
   padding: 2px;
 }
 
 /* -------------------------------------------------------
-   Grid items
+   Tiles
    ------------------------------------------------------- */
-.grid-item {
+.gx-tile {
+  position: relative;
   overflow: hidden;
+  background: var(--surface);
   cursor: pointer;
   margin: 0;
-  padding: 0;
-  position: relative;
 }
 
-.grid-item figcaption {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px 10px 8px;
-  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.52));
-  color: #fff;
-  font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 300;
-  letter-spacing: 0.06em;
-  opacity: 0;
-  transition: opacity 200ms ease;
-  pointer-events: none;
-}
-
-.grid-item:hover figcaption {
-  opacity: 1;
-}
-
-.grid-item img {
+.gx-tile img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -136,9 +258,71 @@ body {
   transition: opacity 250ms ease, transform 350ms ease;
 }
 
-.grid-item:hover img {
+.gx-tile:hover img {
   opacity: 0.88;
   transform: scale(1.03);
+}
+
+.gx-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 30px 14px 12px;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.52));
+  color: #fff;
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 220ms ease;
+  pointer-events: none;
+}
+
+.gx-tile:hover .gx-cap { opacity: 1; }
+
+/* -------------------------------------------------------
+   Bottom bar
+   ------------------------------------------------------- */
+.gallery-bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 36px;
+  padding: 16px clamp(20px, 4vw, 56px);
+  pointer-events: none;
+}
+
+.gallery-bottom-bar__toggle {
+  pointer-events: auto;
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 0;
+  transition: color 200ms ease;
+}
+.gallery-bottom-bar__toggle:hover { color: var(--text); }
+
+.gallery-bottom-bar__scroll {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
 }
 
 /* -------------------------------------------------------
@@ -147,20 +331,18 @@ body {
 .lightbox {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.92);
+  background: rgba(15, 15, 14, 0.94);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 200;
 }
 
-.lightbox[hidden] {
-  display: none;
-}
+.lightbox[hidden] { display: none; }
 
 .lightbox-img {
   max-width: 90vw;
-  max-height: 90vh;
+  max-height: 88vh;
   object-fit: contain;
 }
 
@@ -177,139 +359,69 @@ body {
   padding: 12px 16px;
   transition: color 150ms;
 }
-
 .lightbox-close:hover,
 .lightbox-prev:hover,
-.lightbox-next:hover {
-  color: #fff;
-}
+.lightbox-next:hover { color: #fff; }
 
-.lightbox-close {
-  top: 16px;
-  right: 16px;
-  font-size: 1.75rem;
-  letter-spacing: 0;
-}
-
-.lightbox-prev {
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.lightbox-next {
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/* -------------------------------------------------------
-   Filter panel
-   ------------------------------------------------------- */
-.filter-toggle {
-  width: 100%;
-  background: none;
-  border: none;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 12px;
-  margin-top: 16px;
-  text-align: left;
-  font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-  cursor: pointer;
-}
-
-.filter-panel {
-  overflow: hidden;
-  transition: opacity 200ms ease;
-}
-
-.filter-panel--collapsed {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.filter-fieldset {
-  border: none;
-  padding: 12px 12px 4px;
-}
-
-.filter-fieldset legend {
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
-}
-
-.filter-fieldset label {
-  display: block;
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 300;
-  color: var(--text);
-  padding: 3px 0;
-  cursor: pointer;
-}
-
-.filter-fieldset input[type="radio"] {
-  margin-right: 6px;
-  accent-color: var(--text);
-}
+.lightbox-close { top: 18px; right: 24px; font-size: 1.75rem; }
+.lightbox-prev  { left: 12px; top: 50%; transform: translateY(-50%); }
+.lightbox-next  { right: 12px; top: 50%; transform: translateY(-50%); }
 
 /* -------------------------------------------------------
    Reduced motion
    ------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .grid-item img { transition: none; }
-  .grid-item figcaption { transition: none; }
+  .gx-tile img { transition: none; }
+  .gx-cap      { transition: none; }
 }
 
 /* -------------------------------------------------------
-   Mobile (≤ 768px) — single-column vertical scroll
+   Mobile (≤ 768px)
    ------------------------------------------------------- */
 @media (max-width: 768px) {
-  html, body {
-    height: auto;
+  html, body { height: auto; }
+  body { display: block; }
+
+  .gallery-layout { flex-direction: column; }
+
+  .gallery-logo-rail { display: none; }
+
+  .gallery-filter-aside {
+    width: 100% !important;
+    padding: 20px 16px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: flex-start;
+    transition: none;
   }
 
-  body {
-    display: block;
+  .gallery-filter-aside.is-hidden {
+    display: none;
   }
 
-  .gallery-section {
+  .filter-label { margin-bottom: 0; align-self: center; }
+
+  .gallery-main {
     overflow-x: hidden;
     overflow-y: auto;
-    padding-top: 48px;
-    padding-bottom: 48px;
-    height: auto;
+    padding-bottom: 56px;
   }
 
   .gallery-grid {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: 0 16px;
-    height: auto !important;      /* override JS-set height */
-    width: auto !important;       /* override JS-set width */
+    padding: 0 2px 2px;
+    height: auto !important;
+    width: auto !important;
   }
 
-  .grid-item {
+  .gx-tile {
     width: 100%;
     height: auto;
     aspect-ratio: 4 / 3;
   }
 
-  .grid-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  .gallery-bottom-bar { display: none; }
 }

@@ -10,52 +10,61 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Slackside+One&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="./css/tokens.css">
-  <link rel="stylesheet" href="./css/nav.css">
-  <link rel="stylesheet" href="./css/style_gallery.css?v=9">
-
+  <link rel="stylesheet" href="./css/style_gallery.css?v=10">
 </head>
 <body>
 
-<!-- Global navigation -->
-<nav class="site-nav" aria-label="Primary navigation">
-  <a href="./index.html" class="site-nav__logo" aria-label="Sol Studio home">
-    <img src="Branding/solstudiocutout.png" alt="Sol Studio sun">
-    <span class="site-nav__logo-text">Sol Studio</span>
-  </a>
-  <div class="site-nav__menu">
-    <span class="site-nav__menu-label">Menu</span>
-    <ul class="site-nav__links">
-      <li><a href="./gallery.html" aria-current="page">Gallery</a></li>
-      <li><a href="./about.html">About</a></li>
-      <li><a href="./contact.html">Contact</a></li>
-    </ul>
+<nav class="gallery-nav" id="gallery-nav">
+  <a href="./contact.html" class="gallery-nav__contact">Contact</a>
+  <div class="gallery-nav__right">
+    <button class="gallery-nav__menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav-dropdown">
+      <span class="gallery-nav__menu-label">Menu</span>
+      <span class="gallery-nav__hamburger" aria-hidden="true">
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+    <nav class="gallery-nav__dropdown" id="nav-dropdown" hidden aria-label="Site navigation">
+      <a href="./gallery.html" aria-current="page">Gallery</a>
+      <a href="./about.html">About</a>
+      <a href="./contact.html">Contact</a>
+    </nav>
   </div>
 </nav>
 
-  <div class="gallery-layout">
-    <aside class="gallery-sidebar">
-      <a href="./index.html" class="sidebar-logo" aria-label="Sol Studio home">
-        <img src="Branding/solstudiocutout.png" alt="Sol Studio sun">
-      </a>
-      <button class="filter-toggle" aria-expanded="true" aria-controls="filter-panel">Filter</button>
-      <div class="filter-panel" id="filter-panel"></div>
-    </aside>
+<div class="gallery-layout">
 
-    <section class="gallery-section" id="gallery-section">
-      <main class="gallery-grid" id="gallery-grid"></main>
-    </section>
+  <div class="gallery-logo-rail">
+    <a href="./index.html" aria-label="Sol Studio home">
+      <img src="Branding/solstudiocutout.png" alt="Sol Studio">
+    </a>
   </div>
 
-  <!-- Lightbox overlay -->
-  <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" hidden>
-    <button class="lightbox-close" id="lightbox-close" aria-label="Close">×</button>
-    <button class="lightbox-prev" id="lightbox-prev" aria-label="Previous photo">‹</button>
-    <button class="lightbox-next" id="lightbox-next" aria-label="Next photo">›</button>
-    <img class="lightbox-img" id="lightbox-img" alt="">
-  </div>
+  <aside class="gallery-filter-aside" id="filter-aside">
+    <div class="filter-label">filter:</div>
+    <div id="filter-panel"></div>
+  </aside>
 
-  <script src="./js/gallery-data.js"></script>
-  <script src="./js/gallery-filter.js"></script>
-  <script src="./js/gallery.js?v=6"></script>
+  <section class="gallery-main" id="gallery-section">
+    <div class="gallery-grid" id="gallery-grid"></div>
+  </section>
+
+</div>
+
+<div class="gallery-bottom-bar">
+  <button class="gallery-bottom-bar__toggle" id="filter-toggle" aria-expanded="true" aria-controls="filter-aside">Hide</button>
+  <span class="gallery-bottom-bar__scroll">Scroll&nbsp;→</span>
+</div>
+
+<div class="lightbox" id="lightbox" aria-modal="true" role="dialog" hidden>
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">×</button>
+  <button class="lightbox-prev" id="lightbox-prev" aria-label="Previous photo">‹</button>
+  <button class="lightbox-next" id="lightbox-next" aria-label="Next photo">›</button>
+  <img class="lightbox-img" id="lightbox-img" alt="">
+</div>
+
+<script src="./js/gallery-data.js"></script>
+<script src="./js/gallery-filter.js"></script>
+<script src="./js/gallery.js?v=7"></script>
 </body>
 </html>

@@ -6,18 +6,17 @@
 (function () {
 
   var grid           = document.getElementById('gallery-grid');
-  var header         = document.querySelector('.site-nav');
+  var galleryNav     = document.getElementById('gallery-nav');
   var gallerySection = document.getElementById('gallery-section');
   var filterPanel    = document.getElementById('filter-panel');
-  var filterToggle   = document.querySelector('.filter-toggle');
+  var filterToggle   = document.getElementById('filter-toggle');
+  var filterAside    = document.getElementById('filter-aside');
   var lightbox       = document.getElementById('lightbox');
   var lightboxImg    = document.getElementById('lightbox-img');
 
   var photos       = [];
   var currentIndex = 0;
   var filterState  = { series: null, environment: null };
-  var FILL_TARGET  = 0.90;
-  var VERT_FILL    = 0.82;  // grid height fraction; remaining space split equally top/bottom
 
   /* ----------------------------------------------------------
      1. Load gallery data
@@ -42,7 +41,7 @@
 
     data.forEach(function (photo, index) {
       var fig = document.createElement('figure');
-      fig.className = 'grid-item';
+      fig.className = 'gx-tile';
 
       var img = document.createElement('img');
       img.src      = 'gallery_photos/thumbnails/' + (photo.thumbnail || photo.filename);
@@ -51,6 +50,7 @@
       img.decoding = 'async';
 
       var caption = document.createElement('figcaption');
+      caption.className = 'gx-cap';
       caption.textContent = typeof captionText === 'function'
         ? captionText(photo)
         : (photo.location ? photo.series + ' — ' + photo.location : photo.series);
@@ -65,83 +65,90 @@
   }
 
   /* ----------------------------------------------------------
-     3. Filter UI — builds fieldsets from derived values
+     3. Filter UI — button groups for Series and Element
      ---------------------------------------------------------- */
   function buildFilterUI(values) {
     if (!filterPanel) return;
     filterPanel.innerHTML = '';
 
-    ['series', 'environment'].forEach(function (axis) {
-      var fieldset = document.createElement('fieldset');
-      fieldset.className = 'filter-fieldset';
+    var axes = [
+      { key: 'series',      label: 'Series',  vals: values.series },
+      { key: 'environment', label: 'Element',  vals: values.element }
+    ];
 
-      var legend = document.createElement('legend');
-      legend.textContent = axis === 'series' ? 'Series' : 'Environment';
-      fieldset.appendChild(legend);
+    axes.forEach(function (axis) {
+      var group = document.createElement('div');
+      group.className = 'filter-group';
 
-      var allLabel = document.createElement('label');
-      var allRadio = document.createElement('input');
-      allRadio.type = 'radio';
-      allRadio.name = axis;
-      allRadio.value = '';
-      allRadio.checked = true;
-      allLabel.appendChild(allRadio);
-      allLabel.appendChild(document.createTextNode(' All'));
-      fieldset.appendChild(allLabel);
+      var heading = document.createElement('div');
+      heading.className = 'filter-group-label';
+      heading.textContent = axis.label;
+      group.appendChild(heading);
 
-      values[axis].forEach(function (val) {
-        var label = document.createElement('label');
-        var radio = document.createElement('input');
-        radio.type  = 'radio';
-        radio.name  = axis;
-        radio.value = val;
-        label.appendChild(radio);
-        label.appendChild(document.createTextNode(' ' + (typeof toTitleCase === 'function' ? toTitleCase(val) : val)));
-        fieldset.appendChild(label);
+      var list = document.createElement('div');
+      list.className = 'filter-btn-list';
+
+      axis.vals.forEach(function (val) {
+        var btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.textContent = typeof toTitleCase === 'function' ? toTitleCase(val) : val;
+        btn.dataset.axis = axis.key;
+        btn.dataset.val  = val;
+
+        btn.addEventListener('click', function () {
+          var isActive = filterState[axis.key] === val;
+          filterState[axis.key] = isActive ? null : val;
+          updateFilterButtons();
+          var filtered = typeof filterPhotos === 'function'
+            ? filterPhotos(photos, filterState)
+            : photos;
+          buildGrid(filtered);
+          setColumnWidth();
+        });
+
+        list.appendChild(btn);
       });
 
-      fieldset.addEventListener('change', function (e) {
-        filterState[axis] = e.target.value || null;
-        var filtered = typeof filterPhotos === 'function'
-          ? filterPhotos(photos, filterState)
-          : photos;
-        buildGrid(filtered);
-        setColumnWidth();
-      });
+      group.appendChild(list);
+      filterPanel.appendChild(group);
+    });
+  }
 
-      filterPanel.appendChild(fieldset);
+  function updateFilterButtons() {
+    document.querySelectorAll('.filter-btn').forEach(function (btn) {
+      btn.classList.toggle('is-active', filterState[btn.dataset.axis] === btn.dataset.val);
     });
   }
 
   /* ----------------------------------------------------------
-     4. Filter toggle (show/hide panel)
+     4. Filter sidebar toggle (bottom bar button)
      ---------------------------------------------------------- */
-  if (filterToggle) {
+  if (filterToggle && filterAside) {
     filterToggle.addEventListener('click', function () {
-      var expanded = filterToggle.getAttribute('aria-expanded') === 'true';
-      filterToggle.setAttribute('aria-expanded', String(!expanded));
-      filterPanel.classList.toggle('filter-panel--collapsed', expanded);
+      var hidden = filterAside.classList.toggle('is-hidden');
+      filterToggle.textContent = hidden ? 'Show' : 'Hide';
+      filterToggle.setAttribute('aria-expanded', String(!hidden));
+      setColumnWidth();
     });
   }
 
   /* ----------------------------------------------------------
-     5. Scroll-aware collapse
+     5. Menu dropdown toggle
      ---------------------------------------------------------- */
-  var scrollDebounce;
-  if (gallerySection) {
-    gallerySection.addEventListener('scroll', function () {
-      if (filterPanel) filterPanel.classList.add('filter-panel--collapsed');
-      clearTimeout(scrollDebounce);
-      scrollDebounce = setTimeout(function () {
-        if (filterPanel) filterPanel.classList.remove('filter-panel--collapsed');
-      }, 600);
-    });
-  }
+  var menuBtn     = document.getElementById('menu-btn');
+  var navDropdown = document.getElementById('nav-dropdown');
 
-  var sidebar = document.querySelector('.gallery-sidebar');
-  if (sidebar && filterPanel) {
-    sidebar.addEventListener('mouseenter', function () {
-      filterPanel.classList.remove('filter-panel--collapsed');
+  if (menuBtn && navDropdown) {
+    menuBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = !navDropdown.hidden;
+      navDropdown.hidden = isOpen;
+      menuBtn.setAttribute('aria-expanded', String(!isOpen));
+    });
+
+    document.addEventListener('click', function () {
+      navDropdown.hidden = true;
+      menuBtn.setAttribute('aria-expanded', 'false');
     });
   }
 
@@ -149,22 +156,19 @@
      6. Set grid height + column width
      ---------------------------------------------------------- */
   function setColumnWidth() {
-    var headerH   = header.offsetHeight;
-    var available = window.innerHeight - headerH;
-    var sectionH  = Math.floor(available * VERT_FILL);
-    if (sectionH <= 0) {
+    var navH      = galleryNav ? galleryNav.offsetHeight : 56;
+    var bottomH   = 56;
+    var available = window.innerHeight - navH - bottomH;
+    if (available <= 0) {
       requestAnimationFrame(setColumnWidth);
       return;
     }
     var gap  = 2;
     var pad  = 2;
     var rows = 3;
-    var rowH = (sectionH - 2 * pad - (rows - 1) * gap) / rows;
-    var aspectRatioW = Math.floor((rowH * 3) / 2);
-    var sectionW     = gallerySection ? gallerySection.clientWidth : window.innerWidth;
-    var minFillW     = Math.floor((sectionW * FILL_TARGET) / rows);
-    var colW = Math.max(aspectRatioW, minFillW);
-    grid.style.height          = sectionH + 'px';
+    var rowH = (available - 2 * pad - (rows - 1) * gap) / rows;
+    var colW = Math.floor((rowH * 3) / 2);
+    grid.style.height          = available + 'px';
     grid.style.gridAutoColumns = colW + 'px';
   }
 
@@ -177,8 +181,13 @@
   /* ----------------------------------------------------------
      7. Lightbox
      ---------------------------------------------------------- */
+  var visiblePhotos = photos;
+
   function openLightbox(index) {
-    currentIndex = index;
+    currentIndex  = index;
+    visiblePhotos = typeof filterPhotos === 'function'
+      ? filterPhotos(photos, filterState)
+      : photos;
     refreshLightbox();
     lightbox.hidden = false;
   }
@@ -188,18 +197,19 @@
   }
 
   function refreshLightbox() {
-    var photo = photos[currentIndex];
+    var photo = visiblePhotos[currentIndex];
+    if (!photo) return;
     lightboxImg.src = 'gallery_photos/' + photo.filename;
     lightboxImg.alt = photo.alt || photo.title;
   }
 
   function showPrev() {
-    currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+    currentIndex = (currentIndex - 1 + visiblePhotos.length) % visiblePhotos.length;
     refreshLightbox();
   }
 
   function showNext() {
-    currentIndex = (currentIndex + 1) % photos.length;
+    currentIndex = (currentIndex + 1) % visiblePhotos.length;
     refreshLightbox();
   }
 

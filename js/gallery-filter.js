@@ -16,14 +16,14 @@ function filterPhotos(data, filterState) {
 
 function deriveFilterValues(data) {
   var series = [];
-  var environment = [];
+  var element = [];
   data.forEach(function (photo) {
     if (photo.series && series.indexOf(photo.series) === -1) series.push(photo.series);
-    if (photo.environment && environment.indexOf(photo.environment) === -1) environment.push(photo.environment);
+    if (photo.environment && element.indexOf(photo.environment) === -1) element.push(photo.environment);
   });
   series.sort();
-  environment.sort();
-  return { series: series, environment: environment };
+  element.sort();
+  return { series: series, element: element };
 }
 
 if (typeof module !== 'undefined' && module.exports) {
