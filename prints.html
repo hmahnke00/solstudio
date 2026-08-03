@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prints · Sol Studio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Slackside+One&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/tokens.css">
+  <link rel="stylesheet" href="./css/style_gallery.css?v=10">
+</head>
+<body>
+
+<nav class="gallery-nav" id="gallery-nav">
+  <a href="./contact.html" class="gallery-nav__contact">Contact</a>
+  <div class="gallery-nav__right">
+    <button class="gallery-nav__menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav-dropdown">
+      <span class="gallery-nav__menu-label">Menu</span>
+      <span class="gallery-nav__hamburger" aria-hidden="true">
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+    <nav class="gallery-nav__dropdown" id="nav-dropdown" hidden aria-label="Site navigation">
+      <a href="./gallery.html">Gallery</a>
+      <a href="./prints.html" aria-current="page">Prints</a>
+      <a href="./about.html">About</a>
+      <a href="./contact.html">Contact</a>
+    </nav>
+  </div>
+</nav>
+
+<div class="gallery-layout">
+
+  <div class="gallery-logo-rail">
+    <a href="./index.html" aria-label="Sol Studio home">
+      <img src="Branding/solstudiocutout.png" alt="Sol Studio">
+    </a>
+  </div>
+
+  <aside class="gallery-filter-aside" id="filter-aside">
+    <div class="filter-label">filter:</div>
+    <div id="filter-panel"></div>
+  </aside>
+
+  <section class="gallery-main" id="gallery-section">
+    <div class="gallery-grid" id="gallery-grid"></div>
+  </section>
+
+</div>
+
+<div class="gallery-bottom-bar">
+  <button class="gallery-bottom-bar__toggle" id="filter-toggle" aria-expanded="true" aria-controls="filter-aside">Hide</button>
+  <span class="gallery-bottom-bar__scroll">Scroll&nbsp;→</span>
+</div>
+
+<div class="lightbox" id="lightbox" aria-modal="true" role="dialog" hidden>
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">×</button>
+  <button class="lightbox-prev" id="lightbox-prev" aria-label="Previous photo">‹</button>
+  <button class="lightbox-next" id="lightbox-next" aria-label="Next photo">›</button>
+  <img class="lightbox-img" id="lightbox-img" alt="">
+</div>
+
+<script src="./js/prints-data.js"></script>
+<script src="./js/prints-filter.js"></script>
+<script src="./js/prints.js"></script>
+</body>
+</html>
