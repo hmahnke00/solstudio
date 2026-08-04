@@ -12,7 +12,6 @@
   width: 100%;
   height: var(--nav-height, 56px);
   background: #FFFFFF;
-  border-bottom: 1px solid var(--border, rgba(28, 28, 26, 0.12));
 
   display: flex;
   align-items: center;
@@ -121,8 +120,11 @@
 /* ── Mobile (≤ 768px) ────────────────────────────────────── */
 @media (max-width: 768px) {
   .site-nav {
-    height: 48px;
-    padding: 0 16px;
+    height: auto;
+    min-height: 48px;
+    padding: 10px 16px;
+    flex-wrap: wrap;
+    row-gap: 8px;
   }
 
   /* On mobile: hide Menu label, show links inline always */
@@ -130,21 +132,29 @@
     display: none;
   }
 
+  .site-nav__menu {
+    flex: 1 1 0%;
+    min-width: 0;
+  }
+
   .site-nav__links {
     display: flex;
     position: static;
     border: none;
     padding: 0;
-    min-width: auto;
+    width: 100%;
+    min-width: 0;
     background: transparent;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 10px 16px;
     align-items: center;
+    justify-content: flex-end;
   }
 
   .site-nav__links a {
     display: inline;
     padding: 0;
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .site-nav__logo-text {

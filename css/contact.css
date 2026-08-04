@@ -22,14 +22,22 @@ body{ margin: 0; }
   --artboard-w: 1512px;
   --artboard-h: 982px;
 
-  /* safety margin so scaled artboard never clips at edges */
-  --ui-safe: 16px;
+  /* safety margin so scaled artboard never clips at edges — MUST match
+     .page's actual padding below, or the scale calc and the real
+     available space drift apart and the artboard silently clips
+     (no scrollbar shows it, since .page uses overflow:hidden). */
+  --ui-safe-x: 32px; /* total horizontal padding (both sides) */
+  --ui-safe-y: 32px; /* total vertical padding (both sides) */
 
-  /* Auto-scale artboard to fit viewport (caps at 1) */
+  /* Auto-scale artboard to fit viewport (caps at 1).
+     The sticky nav bar sits above .page and is NOT part of 100dvh's
+     budget for .page — it must be subtracted here too, or the artboard
+     is scaled for more vertical room than actually exists and its
+     bottom (footer logo) silently clips under .page's overflow:hidden. */
   --ui-scale: min(
     1,
-    calc((100vw - var(--ui-safe)) / var(--artboard-w)),
-    calc((100dvh - var(--ui-safe)) / var(--artboard-h))
+    calc((100vw - var(--ui-safe-x)) / var(--artboard-w)),
+    calc((100dvh - var(--nav-height, 56px) - var(--ui-safe-y)) / var(--artboard-h))
   );
 
   /* typography */
@@ -104,24 +112,37 @@ body{ margin: 0; }
   --contact-logo-nudge-y: -80px; /* down (+)  / up (-)   */
 }
 
-/* Full-screen stage that centers the artboard */
+/* Full-screen stage that centers the artboard.
+   NOTE: this intentionally does NOT use display:grid + place-items:center
+   on .container. CSS Grid sizes an auto row/column from the child's
+   UNSCALED intrinsic size — transform:scale() never affects layout or
+   track-sizing math, only paint — so a scaled-down grid item still
+   forces its (oversized) unscaled box into the track, gets centered
+   inside THAT, and overflows the visible page. Absolute positioning +
+   translate(-50%,-50%) sidesteps track sizing entirely: the element is
+   out of flow, so nothing needs to size around its unscaled box. */
 .page{
+  position: relative;
   width: 100%;
-  height: 100vh;
-  display: grid;
-  place-items: center;
+  height: calc(100dvh - var(--nav-height, 56px));
   overflow: hidden;
   background: var(--contact-bg);
-  padding: 16px 16px 28px;
 }
 
-/* Fixed artboard scaled to fit */
+/* Fixed artboard scaled to fit — nudged down slightly (via `top`, not
+   the transform) so the title isn't flush against the nav bar. Adding
+   the offset to `top` instead of inside translate() keeps it a clean,
+   unscaled pixel nudge regardless of --ui-scale. */
 .container{
+  position: absolute;
+  top: calc(50% + 16px);
+  left: 50%;
   width: var(--artboard-w);
   height: var(--artboard-h);
   transform-origin: center;
-  transform: scale(var(--ui-scale));
+  transform: translate(-50%, -50%) scale(var(--ui-scale));
   padding: var(--contact-pad);
+  box-sizing: border-box;
 
   font-family: var(--contact-font);
   letter-spacing: var(--contact-letter);
@@ -337,6 +358,9 @@ input:focus{
   .page{ height: auto; }
 
   .container{
+    position: static;
+    top: auto;
+    left: auto;
     width: min(100%, var(--artboard-w));
     height: auto;
     transform: none;
@@ -350,6 +374,13 @@ input:focus{
     column-gap: 0;
     justify-content: stretch;
     align-self: start;
+  }
+
+  /* Fixed-width columns from the desktop artboard must not survive onto
+     narrow viewports — this was the actual cause of horizontal overflow. */
+  .left, .right{
+    width: 100%;
+    transform: none;
   }
 
   .right{ justify-items: start; }
