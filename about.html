@@ -42,9 +42,11 @@
   <!-- Background watermark (decorative) -->
   <img src="./Branding/solstudiocutout.png" alt="" class="about-bg-sun" aria-hidden="true">
 
-  <!-- Left column: photo + vertical label -->
-  <div class="about-left">
-    <div class="about-image-wrap">
+  <!-- Single free-form composition: photo + rotated title + logo cluster
+       up top-left, bio text lower-right, positioned to match the Figma
+       layout as one scaling unit. -->
+  <div class="about-composition">
+    <div class="about-photo-wrap">
       <picture>
         <source media="(max-width: 768px)" srcset="./about_photos/mammoth_climbing.jpeg">
         <img src="./about_photos/backside_bottom_turn.jpg" class="about-image" alt="Surfer on a wave">
@@ -53,20 +55,15 @@
     <div class="about-vertical-wrapper">
       <div class="about-vertical">Sol Studio</div>
     </div>
-  </div>
-
-  <!-- Right column: logo + text -->
-  <div class="about-right">
-    <img src="./Branding/solstudiocutout.png" alt="Sol Studio logo" class="about-logo">
-
+    <div class="about-logo-wrap">
+      <img src="./Branding/solstudiocutout.png" alt="Sol Studio logo" class="about-logo">
+    </div>
     <div class="about-text">
       <p>
         Hello and welcome. My name is Henry Mahnke, the photographer behind Sol Studio.
         Sol Studio is an exhibit of human connection to beauty wherever it is found.
         This is a story about our interrelation with the physical spaces around us, how they
         shape our identities, foster vitality, and constitute a canvas for existence.
-      </p>
-      <p>
         As a climber, surfer, skier, and hiker, natural environments are a studio for
         self-determination and personal expression. These spaces are a medium for fulfillment
         and connection to the world around us. For years I have revered the Sun as a symbol of

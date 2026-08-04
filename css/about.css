@@ -2,9 +2,14 @@
 
 /* ============================================================
    Sol Studio — About page
-   Two-column layout: photo left, logo + text right.
-   No absolute-position nudge hacks.
-   Mobile (≤ 768px): single-column stacked.
+   Single free-form composition matching the Figma frame
+   (1322x963): photo + rotated title + tilted logo cluster in
+   the upper-left, bio text lower-right, overlapping the same
+   space. The composition is a fixed-size artboard auto-scaled
+   to fit the viewport below the nav (no page scroll on desktop),
+   same technique as the contact page.
+   Mobile (≤ 768px): collage collapses to a simple stacked flow
+   and the page scrolls normally.
    ============================================================ */
 
 *,
@@ -16,28 +21,31 @@
 html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
+  overflow: hidden;
   background: var(--bg, #FFFFFF);
   color: var(--text, #1C1C1A);
 }
 
-/* ── Page wrapper ─────────────────────────────────────────── */
-.about-page {
-  min-height: 100vh;
-  background: var(--bg, #FFFFFF);
+:root {
+  --about-artboard-w: 1322px;
+  --about-artboard-h: 963px;
+  --about-safe-x: 64px;
+  --about-safe-y: 64px;
+  --about-scale: min(
+    1,
+    calc((100vw - var(--about-safe-x)) / var(--about-artboard-w)),
+    calc((100dvh - var(--nav-height, 56px) - var(--about-safe-y)) / var(--about-artboard-h))
+  );
 }
 
-/* ── Main content area (below sticky nav) ─────────────────── */
+/* ── Main content area (below sticky nav) — fills remaining viewport ── */
 .about-hero {
   position: relative;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 80px clamp(20px, 4vw, 56px) 80px;
-  overflow: hidden; /* contain watermark */
-
-  display: grid;
-  grid-template-columns: 55fr 45fr;
-  column-gap: clamp(32px, 5vw, 80px);
-  align-items: start;
+  width: 100%;
+  height: calc(100dvh - var(--nav-height, 56px));
+  overflow: hidden;
+  background: #FFFFFF;
 }
 
 /* ── Background watermark (decorative, non-layout) ─────────── */
@@ -46,141 +54,169 @@ html, body {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: min(1100px, 90vw);
+  /* Capped by width, viewport width, AND the hero's own height
+     (x 1.4, the image's native aspect ratio) so the full graphic
+     always fits inside the overflow:hidden hero — never clipped
+     top/bottom on short viewports. */
+  width: min(1600px, 140vw, calc((100dvh - var(--nav-height, 56px)) * 1.4));
   height: auto;
-  opacity: 0.04;
+  opacity: 0.02;
   z-index: 0;
   pointer-events: none;
   user-select: none;
 }
 
-/* ── Left column: photo + vertical label ─────────────────── */
-.about-left {
-  position: relative;
+/* ── Composition: photo, title, logo and text all live here ─
+   Fixed-size artboard, scaled to fit the viewport. Percentage
+   positions on the children resolve against the unscaled
+   1322x963 box, so the whole collage scales together. */
+.about-composition {
+  position: absolute;
   z-index: 1;
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
+  top: 50%;
+  left: 50%;
+  width: var(--about-artboard-w);
+  height: var(--about-artboard-h);
+  transform-origin: center;
+  transform: translate(-50%, -50%) scale(var(--about-scale));
 }
 
-.about-image-wrap {
-  flex: 1;
-  min-width: 0;
+.about-photo-wrap {
+  position: absolute;
+  left: -5.41%;
+  top: -8.59%;
+  width: 55.41%;
+  height: 50.75%;
+  opacity: 0.8;
+  overflow: hidden;
 }
 
 .about-image {
   width: 100%;
-  height: auto;
-  max-height: 560px;
+  height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center top;
   display: block;
 }
 
-/* Vertical label — decorative accent, right of photo */
+/* Rotated title, hugging the photo's right border and the logo's top */
 .about-vertical-wrapper {
+  position: absolute;
+  left: 45.5%;
+  top: 3%;
+  width: 12%;
+  height: 24%;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  flex-shrink: 0;
-  width: 36px;
-  padding-top: 8px;
 }
 
 .about-vertical {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
+  transform: rotate(90deg);
   font-family: var(--font-brand, 'Slackside One', cursive);
-  font-size: 18px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text, #1C1C1A);
-  opacity: 0.5;
+  font-size: 34.5px;
+  letter-spacing: 0.1px;
+  color: #000;
+  opacity: 0.75;
   white-space: nowrap;
 }
 
-/* ── Right column: logo + text ───────────────────────────── */
-.about-right {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 32px;
-  padding-top: 24px;
+/* Logo, overlapping the bottom-right of the photo, tilted */
+.about-logo-wrap {
+  position: absolute;
+  left: 37.97%;
+  top: 28.09%;
+  width: 23.98%;
+  height: 30.42%;
+  transform: rotate(-6deg);
 }
 
-/* Logo — in document flow, not absolutely positioned */
 .about-logo {
-  width: clamp(80px, 10vw, 140px);
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   display: block;
-  opacity: 0.85;
 }
 
-/* Text block */
+/* Bio text, lower-right, overlapping the same horizontal band
+   as the photo/logo cluster above it */
+.about-text {
+  position: absolute;
+  left: 46.29%;
+  top: 57.22%;
+  width: 52.04%;
+}
+
 .about-text p {
-  margin: 0 0 1.4rem;
-  font-family: var(--font-body, 'Inter', sans-serif);
-  font-size: 17px;
-  font-weight: 300;
-  line-height: 1.75;
-  letter-spacing: 0.01em;
-  color: var(--text, #1C1C1A);
-  max-width: 58ch;
+  margin: 0;
+  font-family: var(--font-brand, 'Slackside One', cursive);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.1px;
+  color: #000;
 }
 
-.about-text p:last-child {
-  margin-bottom: 0;
-}
-
-/* ── Mobile (≤ 768px): single-column stack ───────────────── */
+/* ── Mobile (≤ 768px): collapse to a simple stacked flow ───── */
 @media (max-width: 768px) {
+  html, body {
+    height: auto;
+    overflow: auto;
+  }
+
   .about-hero {
-    grid-template-columns: 1fr;
-    padding: 32px 16px 56px;
-    gap: 0;
-    row-gap: 28px;
+    height: auto;
+    overflow: visible;
+    padding: 24px 16px 40px;
   }
 
-  .about-left {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .about-image {
-    max-height: none;
-    object-fit: contain;
-  }
-
-  /* Stack vertical label horizontally on mobile */
-  .about-vertical-wrapper {
+  .about-composition {
+    position: static;
     width: auto;
-    padding-top: 0;
-    align-self: center;
+    height: auto;
+    transform: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .about-photo-wrap,
+  .about-vertical-wrapper,
+  .about-logo-wrap,
+  .about-text {
+    position: static;
+    width: auto;
+    height: auto;
+  }
+
+  .about-photo-wrap {
+    order: 1;
+  }
+
+  .about-vertical-wrapper {
+    order: 2;
+    justify-content: flex-start;
   }
 
   .about-vertical {
-    writing-mode: horizontal-tb;
-    font-size: 14px;
-    opacity: 0.45;
+    transform: none;
+    font-size: 20px;
     letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
-  .about-right {
-    padding-top: 0;
-    gap: 20px;
-    align-items: center;
-    text-align: center;
+  .about-logo-wrap {
+    order: 3;
+    width: 100px;
+    align-self: center;
+    transform: none;
   }
 
-  .about-logo {
-    width: clamp(64px, 18vw, 100px);
+  .about-text {
+    order: 4;
   }
 
   .about-text p {
     font-size: 16px;
-    max-width: none;
-    text-align: left;
   }
 }
