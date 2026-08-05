@@ -55,6 +55,13 @@
 /* ── Menu trigger (right) ────────────────────────────────── */
 .site-nav__menu {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  /* Extends the hoverable area down to meet the dropdown so the
+     gap between trigger and menu can't break the :hover chain. */
+  padding-bottom: 12px;
 }
 
 .site-nav__menu-label {
@@ -73,6 +80,20 @@
   opacity: 1;
 }
 
+/* Hamburger icon — mirrors .gallery-nav__hamburger on the Gallery/Prints pages */
+.site-nav__hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 26px;
+}
+
+.site-nav__hamburger span {
+  display: block;
+  height: 1.5px;
+  background: var(--text, #1C1C1A);
+}
+
 /* ── Links (dropdown) ────────────────────────────────────── */
 .site-nav__links {
   display: none;
@@ -80,7 +101,7 @@
   margin: 0;
   padding: 12px 0;
   position: absolute;
-  top: calc(100% + 12px);
+  top: 100%;
   right: 0;
   background: #FFFFFF;
   border: 1px solid var(--border, rgba(28, 28, 26, 0.12));
@@ -127,8 +148,9 @@
     row-gap: 8px;
   }
 
-  /* On mobile: hide Menu label, show links inline always */
-  .site-nav__menu-label {
+  /* On mobile: hide Menu label + icon, show links inline always */
+  .site-nav__menu-label,
+  .site-nav__hamburger {
     display: none;
   }
 
