@@ -17,35 +17,36 @@
   --ty-ink: #111;
 
   /* --- Background image (set path here) --- */
-  --ty-img-url: url('./Branding/venice_background.jpg');
-  --ty-img-opacity: 0.55;
+  --ty-img-url: url('../Branding/thankyou_beach_background.jpg');
+  --ty-img-opacity: 0.5;
 
   /* Image placement + sizing */
   --ty-img-size: cover;          /* cover or contain */
   --ty-img-pos-x: 50%;           /* 0%..100% */
   --ty-img-pos-y: 55%;           /* 0%..100% */
-  --ty-img-scale: 1;             /* 1 = normal, >1 zooms */
+  --ty-img-scale: 1.13;          /* 1 = normal, >1 zooms */
 
   /* Optional overlay to soften image */
-  --ty-overlay-opacity: 0.18;    /* 0..1 */
+  --ty-overlay-opacity: 0;       /* 0..1 */
 
   /* --- Text block --- */
-  --ty-text-x: 50%;              /* center by default */
+  --ty-text-x: 50%;              /* dead center */
   --ty-text-y: 50%;
   --ty-text-nudge-x: 0px;
   --ty-text-nudge-y: 0px;
 
-  --ty-title-size: 60px;
+  --ty-title-size: 48px;
   --ty-title-opacity: 1;
 
-  --ty-sub-size: 18px;
+  --ty-sub-size: 20px;
   --ty-sub-opacity: 0.9;
   --ty-sub-gap: 8px;
 
   /* --- Logo --- */
-  --ty-logo-size: 120px;
+  --ty-logo-size: 124px;
   --ty-logo-opacity: 0.95;
   --ty-logo-gap: 14px;
+  --ty-logo-rotate: -6deg;
 
   /* Logo placement relative to text */
   --ty-logo-nudge-x: 0px;
@@ -73,6 +74,12 @@ body{
   height: 100vh;
   overflow: hidden;
   background: #fff;
+}
+
+/* Nav floats over the full-bleed image instead of pushing it down */
+.site-nav{
+  position: fixed;
+  background: transparent;
 }
 
 /* Background image layer */
@@ -144,7 +151,7 @@ body{
   border: 0;
   background: transparent;
 
-  transform: translate(var(--ty-logo-nudge-x), var(--ty-logo-nudge-y));
+  transform: translate(var(--ty-logo-nudge-x), var(--ty-logo-nudge-y)) rotate(var(--ty-logo-rotate));
 }
 
 /* Simple nav link if you include one */
@@ -162,10 +169,9 @@ body{
 
 @media (max-width: 720px){
   :root{
-    --ty-title-size: 48px;
+    --ty-title-size: 36px;
     --ty-sub-size: 16px;
     --ty-logo-size: 80px;
-    --ty-text-y: 50%;
   }
 }
 
